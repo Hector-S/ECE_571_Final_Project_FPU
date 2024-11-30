@@ -1,0 +1,49 @@
+# Compile of fcmp.v was successful.
+# Compile of test_top.v was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.test
+# vsim -voptargs="+acc" work.test 
+# Start time: 01:15:58 on Nov 30,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# Loading work.test(fast)
+# Loading work.fcmp(fast)
+run -all
+# 
+# 
+# Floating Point Compare Version 1.0
+# 
+# 
+# 
+# 
+# Testing FP CMP Unit
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# 
+# 
+# 
+# All test Done !
+# 
+# 
+# Run 600188 vecors, found 0 errors.
+# 
+# 
+# ** Note: $finish    : //thoth.cecs.pdx.edu/Home04/ghu/Desktop/fpu/branches/russelmann/fcmp/test_bench/test_top.v(144)
+#    Time: 60021750 ns  Iteration: 1  Instance: /test
+# 1
+# Break in Module test at //thoth.cecs.pdx.edu/Home04/ghu/Desktop/fpu/branches/russelmann/fcmp/test_bench/test_top.v line 144
