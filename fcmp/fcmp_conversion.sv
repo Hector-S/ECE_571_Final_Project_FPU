@@ -10,7 +10,7 @@ module fcmp (
     input logic [31:0] opa, opb,    // Operand A and B, follows IEEE 754
     output logic unordered,         // Asserted when opa or opb is a NAN (not a number)
     output logic altb, blta, aeqb,  // A>B, B>A, A=B
-    output wire logic inf, zero         // Asserted when opa or opb is a INF(infinite), or when opa is a numeric zero
+    output logic inf, zero          // Asserted when opa or opb is a INF(infinite), or when opa is a numeric zero
 );
 
     // Local declarations

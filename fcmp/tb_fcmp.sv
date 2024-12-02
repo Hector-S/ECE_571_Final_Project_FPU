@@ -6,7 +6,7 @@
 */
 
 module tb_fcmp;
-    // Declarations
+    // Declarations for ports and testbench
     logic		        clk;
     logic	    [31:0]	opa;
     logic	    [31:0]	opb;
@@ -49,6 +49,9 @@ module tb_fcmp;
     integer		        error = 0;
 	integer				vcount = 0;
 
+	// instantiation 
+    fcmp u0(opa, opb, unordered, altb, blta, aeqb, inf, zero );
+	
     // clock pulse
     always #50 clk = ~clk;
     
@@ -60,44 +63,44 @@ module tb_fcmp;
         show_prog = 0;
 
         test_exc = 1;
-        test_sel   = 5'b11111;
+        test_sel   = 5'b11111;	// There are 5 different tests, a 1 indicate that test is being used this run
     end
 
-
+	// Loading in test vector hex code from test_vectors
     initial @(posedge clk) begin
         $display("\n\nTesting FP CMP Unit\n");
 
         if(test_sel[0]) begin
             $display("\nRunning Pat 0 Test ...\n");
-            $readmemh ("//thoth.cecs.pdx.edu/Home04/ghu/Desktop/test_vectors/fcmp/fcmp_pat0.hex", tmem);
+            $readmemh ("test_vectors/fcmp/fcmp_pat0.hex", tmem);
             run_test;
         end
         
         if(test_sel[1]) begin
             $display("\nRunning Pat 1 Test ...\n");
-            $readmemh ("//thoth.cecs.pdx.edu/Home04/ghu/Desktop/test_vectors/fcmp/fcmp_pat1.hex", tmem);
+            $readmemh ("test_vectors/fcmp/fcmp_pat1.hex", tmem);
             run_test;
         end
         
         if(test_sel[2]) begin
             $display("\nRunning Pat 2 Test ...\n");
-            $readmemh ("//thoth.cecs.pdx.edu/Home04/ghu/Desktop/test_vectors/fcmp/fcmp_pat2.hex", tmem);
+            $readmemh ("test_vectors/fcmp/fcmp_pat2.hex", tmem);
             run_test;
         end
         
         if(test_sel[3]) begin
             $display("\nRunning Random Lg. Num Test ...\n");
-            $readmemh ("//thoth.cecs.pdx.edu/Home04/ghu/Desktop/test_vectors/fcmp/fcmp_lg.hex", tmem);
+            $readmemh ("test_vectors/fcmp/fcmp_lg.hex", tmem);
             run_test;
         end
         
         if(test_sel[4]) begin
             $display("\nRunning Random Sm. Num Test ...\n");
-            $readmemh ("//thoth.cecs.pdx.edu/Home04/ghu/Desktop/test_vectors/fcmp/fcmp_sm.hex", tmem);
+            $readmemh ("test_vectors/fcmp/fcmp_sm.hex", tmem);
             run_test;
         end
 
-        // waiting 4 clk cycles before ending test
+        // waiting clk cycles before ending test
         repeat (8)	@(posedge clk);
             
         $display("\n\n");
@@ -108,6 +111,7 @@ module tb_fcmp;
         $stop;
     end
 
+	// task used by each test to test the loaded hex inside tmem
     task automatic run_test;
         @(posedge clk);
         #1;
@@ -150,9 +154,9 @@ module tb_fcmp;
         end
     endtask
 	
+	// Error checking
 	assign m0 = ( (|sum) !== 1'b1) & ( (|sum) !== 1'b0);		// result unknown (ERROR)
 	assign match = (exp === sum) ;								// results are equal
-	
     always_ff @(posedge clk) begin
         //	Floating Point Exceptions ( exc4 )
         //	-------------------------
@@ -220,9 +224,8 @@ module tb_fcmp;
     end
 
     assign sum = {1'b0, altb, blta, aeqb};
-
-    fcmp u0(opa, opb, unordered, altb, blta, aeqb, inf, zero );
-
+	
+	// used for displaying the floating point value
     task disp_fp (
         input logic [31:0] fp
     );
