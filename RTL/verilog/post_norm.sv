@@ -1,111 +1,150 @@
+/////////////////////////////////////////////////////////////////////
+////                                                             ////
+////  Post Norm                                                  ////
+////  Floating Point Post Normalisation Unit                     ////
+////                                                             ////
+////  Author: Rudolf Usselmann                                   ////
+////          rudi@asics.ws                                      ////
+////                                                             ////
+/////////////////////////////////////////////////////////////////////
+////                                                             ////
+//// Copyright (C) 2000 Rudolf Usselmann                         ////
+////                    rudi@asics.ws                            ////
+////                                                             ////
+//// This source file may be used and distributed without        ////
+//// restriction provided that this copyright statement is not   ////
+//// removed from the file and that any derivative work contains ////
+//// the original copyright notice and the associated disclaimer.////
+////                                                             ////
+////     THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY     ////
+//// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED   ////
+//// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS   ////
+//// FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHOR      ////
+//// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,         ////
+//// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES    ////
+//// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE   ////
+//// GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR        ////
+//// BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF  ////
+//// LIABILITY, WHETHER IN  CONTRACT, STRICT LIABILITY, OR TORT  ////
+//// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  ////
+//// OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE         ////
+//// POSSIBILITY OF SUCH DAMAGE.                                 ////
+////                                                             ////
+/////////////////////////////////////////////////////////////////////
+
+
 `timescale 1ns / 100ps
 
-module post_norm(
-       input logic clk, 
-	   input logic [2:0]fpu_op, 
-	   input logic opas, 
-	   input logic sign, 
-	   input logic [1:0] rmode, 
-	   input logic [47:0] fract_in, 
-	   input logic [1:0] exp_in, 
-	   input logic  [1:0] exp_ovf,
-	   input logic opa_dn, 
-	   input logic opb_dn, 
-	   input logic  rem_00, 
-	   input logic [4:0] div_opa_ldz, 
-	   input logic output_zero, 
-	   output logic [30:0] out,
-	   output logic ine, 
-	   output logic overflow, 
-	   output logic underflow, 
-	   output logic f2i_out_sign
-);
+module post_norm( clk, fpu_op, opas, sign, rmode, fract_in, exp_in, exp_ovf,
+		opa_dn, opb_dn, rem_00, div_opa_ldz, output_zero, out,
+		ine, overflow, underflow, f2i_out_sign);
+input		clk;
+input	[2:0]	fpu_op;
+input		opas;
+input		sign;
+input	[1:0]	rmode;
+input	[47:0]	fract_in;
+input	[1:0]	exp_ovf;
+input	[7:0]	exp_in;
+input		opa_dn, opb_dn;
+input		rem_00;
+input	[4:0]	div_opa_ldz;
+input		output_zero;
+output	[30:0]	out;
+output		ine;
+output		overflow, underflow;
+output		f2i_out_sign;
 
+////////////////////////////////////////////////////////////////////////
+//
 // Local Wires and registers
+//
 
+wire	[22:0]	fract_out;
+wire	[7:0]	exp_out;
+wire	[30:0]	out;
+wire		exp_out1_co, overflow, underflow;
+wire	[22:0]	fract_out_final;
+reg	[22:0]	fract_out_rnd;
+wire	[8:0]	exp_next_mi;
+wire		dn;
+wire		exp_rnd_adj;
+wire	[7:0]	exp_out_final;
+reg	[7:0]	exp_out_rnd;
+wire		op_dn = opa_dn | opb_dn;
+wire		op_mul = fpu_op[2:0]==3'b010;
+wire		op_div = fpu_op[2:0]==3'b011;
+wire		op_i2f = fpu_op[2:0]==3'b100;
+wire		op_f2i = fpu_op[2:0]==3'b101;
+reg	[5:0]	fi_ldz;
 
-logic	[22:0]	fract_out;
-logic	[7:0]	exp_out;
-//logic	[30:0]	out;
-logic		    exp_out1_co;
-logic	[22:0]	fract_out_final; // changed to wire due to multiple drivers
-logic	[22:0]	fract_out_rnd;
-logic	[8:0]	exp_next_mi;
-logic		    dn;
-logic           exp_rnd_adj;
-logic   [7:0]	exp_out_final;
-logic	[7:0]	exp_out_rnd;
-logic		op_dn = opa_dn | opb_dn;
-logic		op_mul = fpu_op[2:0]==3'b010; //// check this 
-logic		op_div = fpu_op[2:0]==3'b011;
-logic		op_i2f = fpu_op[2:0]==3'b100;
-logic		op_f2i = fpu_op[2:0]==3'b101;
-logic   [5:0]	fi_ldz;
+wire		g, r, s;
+wire		round, round2, round2a, round2_fasu, round2_fmul;
+wire	[7:0]	exp_out_rnd0, exp_out_rnd1, exp_out_rnd2, exp_out_rnd2a;
+wire	[22:0]	fract_out_rnd0, fract_out_rnd1, fract_out_rnd2, fract_out_rnd2a;
+wire		exp_rnd_adj0, exp_rnd_adj2a;
+wire		r_sign;
+wire		ovf0, ovf1;
+wire	[23:0]	fract_out_pl1;
+wire	[7:0]	exp_out_pl1, exp_out_mi1;
+wire		exp_out_00, exp_out_fe, exp_out_ff, exp_in_00, exp_in_ff;
+wire		exp_out_final_ff, fract_out_7fffff;
+wire	[24:0]	fract_trunc;
+wire	[7:0]	exp_out1;
+wire		grs_sel;
+wire		fract_out_00, fract_in_00;
+wire		shft_co;
+wire	[8:0]	exp_in_pl1, exp_in_mi1;
+wire	[47:0]	fract_in_shftr;
+wire	[47:0]	fract_in_shftl;
 
-logic		g, r, s;
-logic		round, round2, round2a, round2_fasu, round2_fmul;
-logic	[7:0]	exp_out_rnd0, exp_out_rnd1, exp_out_rnd2, exp_out_rnd2a;
-logic	[22:0]	fract_out_rnd0, fract_out_rnd1, fract_out_rnd2, fract_out_rnd2a;
-logic		    exp_rnd_adj0, exp_rnd_adj2a;
-logic		    r_sign;
-logic		    ovf0, ovf1;
-logic	[23:0]	fract_out_pl1;
-logic	[7:0]	exp_out_pl1, exp_out_mi1;
-logic		    exp_out_00, exp_out_fe, exp_out_ff, exp_in_00, exp_in_ff;
-logic		    exp_out_final_ff, fract_out_7fffff;
-logic	[24:0]	fract_trunc;
-logic	[7:0]	exp_out1;
-logic		grs_sel;
-logic		fract_out_00, fract_in_00;
-logic		shft_co;
-logic	[8:0]	exp_in_pl1, exp_in_mi1;
-logic	[47:0]	fract_in_shftr;
-logic	[47:0]	fract_in_shftl;
+wire	[7:0]	exp_div;
+wire	[7:0]	shft2;
+wire	[7:0]	exp_out1_mi1;
+wire		div_dn;
+wire		div_nr;
+wire		grs_sel_div;
 
-logic	[7:0]	exp_div;
-logic	[7:0]	shft2;
-logic	[7:0]	exp_out1_mi1;
-logic		div_dn;
-logic		div_nr;
-logic		grs_sel_div;
+wire		div_inf;
+wire	[6:0]	fi_ldz_2a;
+wire	[7:0]	fi_ldz_2;
+wire	[7:0]	div_shft1, div_shft2, div_shft3, div_shft4;
+wire		div_shft1_co;
+wire	[8:0]	div_exp1;
+wire	[7:0]	div_exp2, div_exp3;
+wire		left_right, lr_mul, lr_div;
+wire	[7:0]	shift_right, shftr_mul, shftr_div;
+wire	[7:0]	shift_left,  shftl_mul, shftl_div;
+wire	[7:0]	fasu_shift;
+wire	[7:0]	exp_fix_div;
 
-logic		div_inf;
-logic	[6:0]	fi_ldz_2a;
-logic	[7:0]	fi_ldz_2;
-logic	[7:0]	div_shft1, div_shft2, div_shft3, div_shft4;
-	
-logic		div_shft1_co;
-logic	[8:0]	div_exp1;
-logic	[7:0]	div_exp2, div_exp3;
-logic		left_right, lr_mul, lr_div;
-logic	[7:0]	shift_right, shftr_mul, shftr_div;
-logic	[7:0]	shift_left,  shftl_mul, shftl_div;
-logic	[7:0]	fasu_shift;
-logic	[7:0]	exp_fix_div;
+wire	[7:0]	exp_fix_diva, exp_fix_divb;
+wire	[5:0]	fi_ldz_mi1;
+wire	[5:0]	fi_ldz_mi22;
+wire		exp_zero;
+wire	[6:0]	ldz_all;
+wire	[7:0]	ldz_dif;
 
-logic	[7:0]	exp_fix_diva, exp_fix_divb;
-logic	[5:0]	fi_ldz_mi1;
-logic	[5:0]	fi_ldz_mi22;
-logic		exp_zero;		
-logic	[6:0]	ldz_all;
-logic	[7:0]	ldz_dif;
+wire	[8:0]	div_scht1a;
+wire	[7:0]	f2i_shft;
+wire	[55:0]	exp_f2i_1;
+wire		f2i_zero, f2i_max;
+wire	[7:0]	f2i_emin;
+wire	[7:0]	conv_shft;
+wire	[7:0]	exp_i2f, exp_f2i, conv_exp;
+wire		round2_f2i;
 
-logic	[8:0]	div_scht1a;
-logic	[7:0]	f2i_shft;
-logic	[55:0]	exp_f2i_1;
-logic		f2i_zero, f2i_max;
-logic	[7:0]	f2i_emin;
-logic	[7:0]	conv_shft;
-logic	[7:0]	exp_i2f, exp_f2i, conv_exp;
-logic 		round2_f2i;
+////////////////////////////////////////////////////////////////////////
+//
+// Normalize and Round Logic
+//
 
-// Normalize and Round logic
+// ---------------------------------------------------------------------
+// Count Leading zeros in fraction
 
-// Count Leading zeros in Fraction by using always_comb and unique case 
-
-always_comb begin
-    unique casez (fract_in)  // 'casez' allows "?" for dont care bits
-        48'b1???????????????????????????????????????????????: fi_ldz =  1;
+always @(fract_in)
+   casex(fract_in)	// synopsys full_case parallel_case
+	48'b1???????????????????????????????????????????????: fi_ldz =  1;
 	48'b01??????????????????????????????????????????????: fi_ldz =  2;
 	48'b001?????????????????????????????????????????????: fi_ldz =  3;
 	48'b0001????????????????????????????????????????????: fi_ldz =  4;
@@ -153,205 +192,180 @@ always_comb begin
 	48'b0000000000000000000000000000000000000000000001??: fi_ldz =  46;
 	48'b00000000000000000000000000000000000000000000001?: fi_ldz =  47;
 	48'b00000000000000000000000000000000000000000000000?: fi_ldz =  48;
-	default: fi_ldz = 48; //Default case to handle all zeros
-	endcase
-end
+   endcase
 
+
+// ---------------------------------------------------------------------
 // Normalize
 
-logic		exp_in_80;
-logic		rmode_00, rmode_01, rmode_10, rmode_11;
+wire		exp_in_80;
+wire		rmode_00, rmode_01, rmode_10, rmode_11;
 
 // Misc common signals
-always_comb begin
- exp_in_ff        = &exp_in;
- exp_in_00        = !(|exp_in);
- exp_in_80	= exp_in[7] & !(|exp_in[6:0]);
- exp_out_ff       = &exp_out;
- exp_out_00       = !(|exp_out);
- exp_out_fe       = &exp_out[7:1] & !exp_out[0];
- exp_out_final_ff = &exp_out_final;
+assign exp_in_ff        = &exp_in;
+assign exp_in_00        = !(|exp_in);
+assign exp_in_80	= exp_in[7] & !(|exp_in[6:0]);
+assign exp_out_ff       = &exp_out;
+assign exp_out_00       = !(|exp_out);
+assign exp_out_fe       = &exp_out[7:1] & !exp_out[0];
+assign exp_out_final_ff = &exp_out_final;
 
- fract_out_7fffff = &fract_out;
- fract_out_00     = !(|fract_out);
- fract_in_00      = !(|fract_in);
+assign fract_out_7fffff = &fract_out;
+assign fract_out_00     = !(|fract_out);
+assign fract_in_00      = !(|fract_in);
 
- rmode_00 = (rmode==2'b00);
- rmode_01 = (rmode==2'b01);
- rmode_10 = (rmode==2'b10);
- rmode_11 = (rmode==2'b11);
+assign rmode_00 = (rmode==2'b00);
+assign rmode_01 = (rmode==2'b01);
+assign rmode_10 = (rmode==2'b10);
+assign rmode_11 = (rmode==2'b11);
 
 // Fasu Output will be denormalized ...
- dn = !op_mul & !op_div & (exp_in_00 | (exp_next_mi[8] & !fract_in[47]) );
- end
- 
- // Fraction Normalization
+assign dn = !op_mul & !op_div & (exp_in_00 | (exp_next_mi[8] & !fract_in[47]) );
+
+// ---------------------------------------------------------------------
+// Fraction Normalization
 parameter	f2i_emax = 8'h9d;
 
-//Signals for f2i
-always_comb begin 
-     fract_out_pl1 = fract_out + 1; // Incremented fraction for rounding
-	 f2i_emin = rmode_00 ? 8'h7e : 8'h7f;
-	 //f2i zero signal
-	 f2i_zero = (!opas & (exp_in<f2i_emin)) | 
-	            (opas & (exp_in>f2i_emax)) | 
-				(opas & (exp_in<f2i_emin) & (fract_in_00 | !rmode_11));
-	// f2i_max signal
-	 f2i_max = (!opas & (exp_in>f2i_emax)) | 
-	            (opas & (exp_in<f2i_emin) & !fract_in_00 & rmode_11);
-end
+// Incremented fraction for rounding
+assign fract_out_pl1 = fract_out + 1;
 
-// calculating various shifting options
-always_comb  begin 
-// shift and carry logic 
-     {shft_co,shftr_mul} = (!exp_ovf[1] & exp_in_00) ? {1'b0, exp_out} : exp_in_mi1 ;
-     {div_shft1_co, div_shft1} = exp_in_00 ? {1'b0, div_opa_ldz} : div_scht1a;
-	 
-// Division shift and carry logic 
-     div_scht1a = exp_in-div_opa_ldz; // 9 bits - includes carry out
-     div_shft2  = exp_in+2;
-     div_shft3  = div_opa_ldz+exp_in;
-     div_shft4  = div_opa_ldz-exp_in;
-	 
-// Division denormalization snd overflow logic 
-    div_dn    = op_dn & div_shft1_co;
-    div_nr    = op_dn & exp_ovf[1]  & !(|fract_in[46:23]) & (div_shft3>8'h16);
-	
-//fraction to integer shift logic 
-     f2i_shft  = exp_in-8'h7d;
-end
+// Special Signals for f2i
+assign f2i_emin = rmode_00 ? 8'h7e : 8'h7f;
+assign f2i_zero = (!opas & (exp_in<f2i_emin)) | (opas & (exp_in>f2i_emax)) | (opas & (exp_in<f2i_emin) & (fract_in_00 | !rmode_11));
+assign f2i_max = (!opas & (exp_in>f2i_emax)) | (opas & (exp_in<f2i_emin) & !fract_in_00 & rmode_11);
 
-//Select shifting direction
-always_comb begin
-    left_right = op_div ? lr_div : op_mul ? lr_mul : 1; // selecting left or right shift direction based on operation type
-// logic for lr_div calculation
-	lr_div = (op_dn & !exp_ovf[1] & exp_ovf[0]) ? 1 :(op_dn & exp_ovf[1]) ? 0 :(op_dn & div_shft1_co) ? 0 :(op_dn & exp_out_00) ? 1 :(!op_dn & exp_out_00 & !exp_ovf[1]) ? 1 :exp_ovf[1] ? 0 : 1;
-// logic for lr_mul calculation
-	lr_mul 	= (shft_co | (!exp_ovf[1] & exp_in_00) |(!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00) )) ? 1 :( exp_ovf[1] | exp_in_00 ) ?	0 :1;
-	
-end
+// Claculate various shifting options
+
+assign {shft_co,shftr_mul} = (!exp_ovf[1] & exp_in_00) ? {1'b0, exp_out} : exp_in_mi1 ;
+assign {div_shft1_co, div_shft1} = exp_in_00 ? {1'b0, div_opa_ldz} : div_scht1a;
+
+assign div_scht1a = exp_in-div_opa_ldz; // 9 bits - includes carry out
+assign div_shft2  = exp_in+2;
+assign div_shft3  = div_opa_ldz+exp_in;
+assign div_shft4  = div_opa_ldz-exp_in;
+
+assign div_dn    = op_dn & div_shft1_co;
+assign div_nr    = op_dn & exp_ovf[1]  & !(|fract_in[46:23]) & (div_shft3>8'h16);
+
+assign f2i_shft  = exp_in-8'h7d;
+
+// Select shifting direction
+assign left_right = op_div ? lr_div : op_mul ? lr_mul : 1;
+
+assign lr_div = 	(op_dn & !exp_ovf[1] & exp_ovf[0])     ? 1 :
+			(op_dn & exp_ovf[1])                   ? 0 :
+			(op_dn & div_shft1_co)                 ? 0 :
+			(op_dn & exp_out_00)                   ? 1 :
+			(!op_dn & exp_out_00 & !exp_ovf[1])    ? 1 :
+			exp_ovf[1]                             ? 0 :
+			                                         1;
+assign lr_mul = 	(shft_co | (!exp_ovf[1] & exp_in_00) |
+			(!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00) )) ? 	1 :
+			( exp_ovf[1] | exp_in_00 ) ?					0 :
+											1;
 
 // Select Left and Right shift value
-always_comb begin 
-    fasu_shift  = (dn | exp_out_00) ? (exp_in_00 ? 8'h2 : exp_in_pl1[7:0]) : {2'h0, fi_ldz};
-	shift_right = op_div ? shftr_div : shftr_mul;
-	conv_shft = op_f2i ? f2i_shft : {2'h0, fi_ldz};
-	shift_left  = op_div ? shftl_div : op_mul ? shftl_mul : (op_f2i | op_i2f) ? conv_shft : fasu_shift;
-end
-//left shift logic for multiplication
-always_comb begin
-    shftl_mul = 	(shft_co |
-			(!exp_ovf[1] & exp_in_00) |(!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00))) ? exp_in_pl1[7:0] : {2'h0, fi_ldz};
-end
+assign fasu_shift  = (dn | exp_out_00) ? (exp_in_00 ? 8'h2 : exp_in_pl1[7:0]) : {2'h0, fi_ldz};
+assign shift_right = op_div ? shftr_div : shftr_mul;
 
-// left shift logic for Division
-always_comb begin 
-    shftl_div = 	( op_dn & exp_out_00 & !(!exp_ovf[1] & exp_ovf[0]))	? div_shft1[7:0] :(!op_dn & exp_out_00 & !exp_ovf[1])    			? exp_in[7:0] : {2'h0, fi_ldz};
- end
- 
+assign conv_shft = op_f2i ? f2i_shft : {2'h0, fi_ldz};
 
-//Right shift logic for Division
-always_comb begin
-    assign shftr_div = 	(op_dn & exp_ovf[1])? div_shft3 :(op_dn & div_shft1_co)? div_shft4 : div_shft2;
-end
+assign shift_left  = op_div ? shftl_div : op_mul ? shftl_mul : (op_f2i | op_i2f) ? conv_shft : fasu_shift;
 
-// perform the actual shifting: right shift
-always_comb begin 
-    fract_in_shftr   = (|shift_right[7:6]) ? 0 : fract_in>>shift_right[5:0]; 
-end
+assign shftl_mul = 	(shft_co |
+			(!exp_ovf[1] & exp_in_00) |
+			(!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00))) ? exp_in_pl1[7:0] : {2'h0, fi_ldz};
 
-//perform the actual shifting: left shift 
-always_comb begin
-    fract_in_shftl   = (|shift_left[7:6] | (f2i_zero & op_f2i)) ? 0 : fract_in<<shift_left[5:0];
-end
+assign shftl_div = 	( op_dn & exp_out_00 & !(!exp_ovf[1] & exp_ovf[0]))	? div_shft1[7:0] :
+			(!op_dn & exp_out_00 & !exp_ovf[1])    			? exp_in[7:0] :
+			                                        		 {2'h0, fi_ldz};
+assign shftr_div = 	(op_dn & exp_ovf[1])                   ? div_shft3 :
+			(op_dn & div_shft1_co)                 ? div_shft4 :
+								 div_shft2;
+// Do the actual shifting
+assign fract_in_shftr   = (|shift_right[7:6])                      ? 0 : fract_in>>shift_right[5:0];
+assign fract_in_shftl   = (|shift_left[7:6] | (f2i_zero & op_f2i)) ? 0 : fract_in<<shift_left[5:0];
 
-// choose the final fraction output which is based on he shift direction
-always_comb begin
-    {fract_out,fract_trunc} = left_right ? fract_in_shftl : fract_in_shftr;
-end
+// Chose final fraction output
+assign {fract_out,fract_trunc} = left_right ? fract_in_shftl : fract_in_shftr;
 
-//Exponnent Normalization
-always_comb begin
-     fi_ldz_mi1    = fi_ldz - 1;
-     fi_ldz_mi22   = fi_ldz - 22;
-     exp_out_pl1   = exp_out + 1;
-     exp_out_mi1   = exp_out - 1;
-     exp_in_pl1    = exp_in  + 1;	// 9 bits - includes carry out
-     exp_in_mi1    = exp_in  - 1;	// 9 bits - includes carry out
-     exp_out1_mi1  = exp_out1 - 1;
-     exp_next_mi  = exp_in_pl1 - fi_ldz_mi1;	// 9 bits - includes carry out
-     exp_fix_diva = exp_in - fi_ldz_mi22;
-     exp_fix_divb = exp_in - fi_ldz_mi1;
-     exp_zero  = (exp_ovf[1] & !exp_ovf[0] & op_mul & (!exp_rnd_adj2a | !rmode[1])) | (op_mul & exp_out1_co); 
-	{exp_out1_co, exp_out1} = fract_in[47] ? exp_in_pl1 : exp_next_mi;
-     f2i_out_sign =  !opas ? ((exp_in<f2i_emin) ? 0 : (exp_in>f2i_emax) ? 0 : opas) : ((exp_in<f2i_emin) ? 0 : (exp_in>f2i_emax) ? 1 : opas);
-     exp_i2f   = fract_in_00 ? (opas ? 8'h9e : 0) : (8'h9e-fi_ldz);
-     exp_f2i_1 = {{8{fract_in[47]}}, fract_in }<<f2i_shft;
-     exp_f2i   = f2i_zero ? 0 : f2i_max ? 8'hff : exp_f2i_1[55:48];
-     conv_exp  = op_f2i ? exp_f2i : exp_i2f;
+// ---------------------------------------------------------------------
+// Exponent Normalization
 
-     exp_out = op_div ? exp_div : (op_f2i | op_i2f) ? conv_exp : exp_zero ? 8'h0 : dn ? {6'h0, fract_in[47:46]} : exp_out1;
-end
+assign fi_ldz_mi1    = fi_ldz - 1;
+assign fi_ldz_mi22   = fi_ldz - 22;
+assign exp_out_pl1   = exp_out + 1;
+assign exp_out_mi1   = exp_out - 1;
+assign exp_in_pl1    = exp_in  + 1;	// 9 bits - includes carry out
+assign exp_in_mi1    = exp_in  - 1;	// 9 bits - includes carry out
+assign exp_out1_mi1  = exp_out1 - 1;
 
-// calculate ldz_all, ldz_dif, fi_ldz_2a, fi_ldz_2
+assign exp_next_mi  = exp_in_pl1 - fi_ldz_mi1;	// 9 bits - includes carry out
 
-always_comb begin
-    ldz_all   = div_opa_ldz + fi_ldz;
-	ldz_dif   = fi_ldz_2 - div_opa_ldz;
-    fi_ldz_2a = 6'd23 - fi_ldz;
-    fi_ldz_2  = {fi_ldz_2a[6], fi_ldz_2a[6:0]};
-end
+assign exp_fix_diva = exp_in - fi_ldz_mi22;
+assign exp_fix_divb = exp_in - fi_ldz_mi1;
 
-// calculate div_exp1, div_exp2, div_exp3
-always_comb begin
-    div_exp1  = exp_in_mi1 + fi_ldz_2;	// 9 bits - includes carry out
-    div_exp2  = exp_in_pl1 - ldz_all;
-    div_exp3  = exp_in + ldz_dif;;
-end
+assign exp_zero  = (exp_ovf[1] & !exp_ovf[0] & op_mul & (!exp_rnd_adj2a | !rmode[1])) | (op_mul & exp_out1_co);
+assign {exp_out1_co, exp_out1} = fract_in[47] ? exp_in_pl1 : exp_next_mi;
 
-//exponent for Division
-always_comb begin
-exp_div = (opa_dn & opb_dn)	? div_exp3 :opb_dn ? div_exp1[7:0] :(opa_dn & !( (exp_in<div_opa_ldz) | (div_exp2>9'hfe) ))	? div_exp2 :(opa_dn | (exp_in_00 & !exp_ovf[1]) )? 0 :  exp_out1_mi1;
-	
-end
+assign f2i_out_sign =  !opas ? ((exp_in<f2i_emin) ? 0 : (exp_in>f2i_emax) ? 0 : opas) :
+			       ((exp_in<f2i_emin) ? 0 : (exp_in>f2i_emax) ? 1 : opas);
 
-// To handle division infinity condition
-always_comb begin
-    div_inf = opb_dn & !opa_dn & (div_exp1[7:0] < 8'h7f);
-end
+assign exp_i2f   = fract_in_00 ? (opas ? 8'h9e : 0) : (8'h9e-fi_ldz);
+assign exp_f2i_1 = {{8{fract_in[47]}}, fract_in }<<f2i_shft;
+assign exp_f2i   = f2i_zero ? 0 : f2i_max ? 8'hff : exp_f2i_1[55:48];
+assign conv_exp  = op_f2i ? exp_f2i : exp_i2f;
 
-//round
-// Extract rounding bits (GRS) bits
-always_comb begin
-     grs_sel_div = op_div & (exp_ovf[1] | div_dn | exp_out1_co | exp_out_00);
-     g = grs_sel_div ? fract_out[0]                   : fract_out[0];
-     r = grs_sel_div ? (fract_trunc[24] & !div_nr)    : fract_trunc[24];
-     s = grs_sel_div ? |fract_trunc[24:0]             : (|fract_trunc[23:0] | (fract_trunc[24] & op_div));
-end
+assign exp_out = op_div ? exp_div : (op_f2i | op_i2f) ? conv_exp : exp_zero ? 8'h0 : dn ? {6'h0, fract_in[47:46]} : exp_out1;
 
-// To Round to nearest even
-always_comb begin
-      round = (g & r) | (r & s) ;
-      {exp_rnd_adj0, fract_out_rnd0} = round ? fract_out_pl1 : {1'b0, fract_out};
-       exp_out_rnd0 =  exp_rnd_adj0 ? exp_out_pl1 : exp_out;
-      ovf0 = exp_out_final_ff & !rmode_01 & !op_f2i;
-end
+assign ldz_all   = div_opa_ldz + fi_ldz;
+assign ldz_dif   = fi_ldz_2 - div_opa_ldz;
+assign fi_ldz_2a = 6'd23 - fi_ldz;
+assign fi_ldz_2  = {fi_ldz_2a[6], fi_ldz_2a[6:0]};
 
-// To Round to zero
-always_comb begin
-     fract_out_rnd1 = (exp_out_ff & !op_div & !dn & !op_f2i) ? 23'h7fffff : fract_out;
-     exp_fix_div    = (fi_ldz>22) ? exp_fix_diva : exp_fix_divb;
-     exp_out_rnd1   = (g & r & s & exp_in_ff) ? (op_div ? exp_fix_div : exp_next_mi[7:0]) :(exp_out_ff & !op_f2i) ? exp_in : exp_out;
-     ovf1 = exp_out_ff & !dn;
-end
+assign div_exp1  = exp_in_mi1 + fi_ldz_2;	// 9 bits - includes carry out
 
-// To round to +inf (UP) and -inf (DOWN)
-always_comb begin 
-    r_sign = sign;
-    round2a = !exp_out_fe | !fract_out_7fffff | (exp_out_fe & fract_out_7fffff); //conditions for rounding to +inf or -inf
-    round2_fasu = ((r | s) & !r_sign) & (!exp_out[7] | (exp_out[7] & round2a));
-	
-	 round2_fmul = !r_sign & 
+assign div_exp2  = exp_in_pl1 - ldz_all;
+assign div_exp3  = exp_in + ldz_dif;
+
+assign exp_div =(opa_dn & opb_dn)					? div_exp3 :
+		 opb_dn							? div_exp1[7:0] :
+		(opa_dn & !( (exp_in<div_opa_ldz) | (div_exp2>9'hfe) ))	? div_exp2 :
+		(opa_dn | (exp_in_00 & !exp_ovf[1]) )			? 0 :
+									  exp_out1_mi1;
+
+assign div_inf = opb_dn & !opa_dn & (div_exp1[7:0] < 8'h7f);
+
+// ---------------------------------------------------------------------
+// Round
+
+// Extract rounding (GRS) bits
+assign grs_sel_div = op_div & (exp_ovf[1] | div_dn | exp_out1_co | exp_out_00);
+
+assign g = grs_sel_div ? fract_out[0]                   : fract_out[0];
+assign r = grs_sel_div ? (fract_trunc[24] & !div_nr)    : fract_trunc[24];
+assign s = grs_sel_div ? |fract_trunc[24:0]             : (|fract_trunc[23:0] | (fract_trunc[24] & op_div));
+
+// Round to nearest even
+assign round = (g & r) | (r & s) ;
+assign {exp_rnd_adj0, fract_out_rnd0} = round ? fract_out_pl1 : {1'b0, fract_out};
+assign exp_out_rnd0 =  exp_rnd_adj0 ? exp_out_pl1 : exp_out;
+assign ovf0 = exp_out_final_ff & !rmode_01 & !op_f2i;
+
+// round to zero
+assign fract_out_rnd1 = (exp_out_ff & !op_div & !dn & !op_f2i) ? 23'h7fffff : fract_out;
+assign exp_fix_div    = (fi_ldz>22) ? exp_fix_diva : exp_fix_divb;
+assign exp_out_rnd1   = (g & r & s & exp_in_ff) ? (op_div ? exp_fix_div : exp_next_mi[7:0]) :
+			(exp_out_ff & !op_f2i) ? exp_in : exp_out;
+assign ovf1 = exp_out_ff & !dn;
+
+// round to +inf (UP) and -inf (DOWN)
+assign r_sign = sign;
+
+assign round2a = !exp_out_fe | !fract_out_7fffff | (exp_out_fe & fract_out_7fffff);
+assign round2_fasu = ((r | s) & !r_sign) & (!exp_out[7] | (exp_out[7] & round2a));
+
+assign round2_fmul = !r_sign & 
 		(
 			(exp_ovf[1] & !fract_in_00 &
 				( ((!exp_out1_co | op_dn) & (r | s | (!rem_00 & op_div) )) | fract_out_00 | (!op_dn & !op_div))
@@ -363,47 +377,38 @@ always_comb begin
 					)
 			)
 		);
-    round2_f2i = rmode_10 & (( |fract_in[23:0] & !opas & (exp_in<8'h80 )) | (|fract_trunc));
-    round2 = (op_mul | op_div) ? round2_fmul : op_f2i ? round2_f2i : round2_fasu; // To select the round type based on operation
-end
- 
- // Rounding adjustments for fraction and exponent
- always_comb begin
-    {exp_rnd_adj2a, fract_out_rnd2a} = round2 ? fract_out_pl1 : {1'b0, fract_out};
-    exp_out_rnd2a  = exp_rnd_adj2a ? ((exp_ovf[1] & op_mul) ? exp_out_mi1 : exp_out_pl1) : exp_out;
-end
 
-// final fraction rounding and exponent adjustments
-always_comb begin 
-    fract_out_rnd2 = (r_sign & exp_out_ff & !op_div & !dn & !op_f2i) ? 23'h7fffff : fract_out_rnd2a;
-    exp_out_rnd2   = (r_sign & exp_out_ff & !op_f2i) ? 8'hfe      : exp_out_rnd2a;
-end
- 
-// To choose rounding mode for exp_out 
-always_comb begin
-    case (rmode) 
-	0    : exp_out_rnd = exp_out_rnd0;
-	1    : exp_out_rnd = exp_out_rnd1;
-	2,3  : exp_out_rnd = exp_out_rnd2;
-	default : exp_out_rnd = exp_out_rnd0; // default case to avoid latches
-    endcase
-end
+assign round2_f2i = rmode_10 & (( |fract_in[23:0] & !opas & (exp_in<8'h80 )) | (|fract_trunc));
+assign round2 = (op_mul | op_div) ? round2_fmul : op_f2i ? round2_f2i : round2_fasu;
 
-// To choose rounding mode for fracta_out 
-always_comb begin 
-    case(rmode) 
-     0   : fract_out_rnd = fract_out_rnd0;
-	 1   : fract_out_rnd = fract_out_rnd1;
-	 2,3 : fract_out_rnd = fract_out_rnd2;
+assign {exp_rnd_adj2a, fract_out_rnd2a} = round2 ? fract_out_pl1 : {1'b0, fract_out};
+assign exp_out_rnd2a  = exp_rnd_adj2a ? ((exp_ovf[1] & op_mul) ? exp_out_mi1 : exp_out_pl1) : exp_out;
+
+assign fract_out_rnd2 = (r_sign & exp_out_ff & !op_div & !dn & !op_f2i) ? 23'h7fffff : fract_out_rnd2a;
+assign exp_out_rnd2   = (r_sign & exp_out_ff & !op_f2i) ? 8'hfe      : exp_out_rnd2a;
+
+
+// Choose rounding mode
+always @(rmode or exp_out_rnd0 or exp_out_rnd1 or exp_out_rnd2)
+	case(rmode)	// synopsys full_case parallel_case
+	   0: exp_out_rnd = exp_out_rnd0;
+	   1: exp_out_rnd = exp_out_rnd1;
+	 2,3: exp_out_rnd = exp_out_rnd2;
 	endcase
-end
 
-// For final output MUX and Handling special numbers
+always @(rmode or fract_out_rnd0 or fract_out_rnd1 or fract_out_rnd2)
+	case(rmode)	// synopsys full_case parallel_case
+	   0: fract_out_rnd = fract_out_rnd0;
+	   1: fract_out_rnd = fract_out_rnd1;
+	 2,3: fract_out_rnd = fract_out_rnd2;
+	endcase
 
-logic max_num, inf_out;
+// ---------------------------------------------------------------------
+// Final Output Mux
+// Fix Output for denormalized and special numbers
+wire	max_num, inf_out;
 
-always_comb begin
-     max_num =  ( !rmode_00 & (op_mul | op_div ) & (
+assign	max_num =  ( !rmode_00 & (op_mul | op_div ) & (
 							  ( exp_ovf[1] &  exp_ovf[0]) |
 							  (!exp_ovf[1] & !exp_ovf[0] & exp_in_ff & (fi_ldz_2<24) & (exp_out!=8'hfe) )
 							  )
@@ -438,12 +443,8 @@ always_comb begin
 			    )
 		   );
 
-end
 
-
-// To calculate inf_out 
-always_comb begin
-    inf_out = (rmode[1] & (op_mul | op_div) & !r_sign & (	(exp_in_ff & !op_div) |
+assign inf_out = (rmode[1] & (op_mul | op_div) & !r_sign & (	(exp_in_ff & !op_div) |
 								(exp_ovf[1] & exp_ovf[0] & (exp_in_00 | exp_in[7]) ) 
 							   )
 		) | (div_inf & op_div & (
@@ -452,51 +453,35 @@ always_comb begin
 				(rmode[1] & !exp_ovf[1] & exp_ovf[0] & exp_in_00 & !r_sign)
 				)
 		) | (op_div & rmode[1] & exp_in_ff & op_dn & !r_sign & (fi_ldz_2 < 24)  & (exp_out_rnd!=8'hfe) );
-end
 
-// Final Output for fract_out_final 
-always_comb begin
-   fract_out_final =	(inf_out | ovf0 | output_zero ) ? 23'h0 :
+assign fract_out_final =	(inf_out | ovf0 | output_zero ) ? 23'h0 :
 				(max_num | (f2i_max & op_f2i) ) ? 23'h7fffff :
 				fract_out_rnd;
-end
 
-// Final Output for exp_out_final
-always_comb begin 
-    if ((op_div & exp_ovf[1] & !exp_ovf[0]) | output_zero ) begin 
-	exp_out_final = 8'h00;
-	end else if ((op_div & exp_ovf[1] &  exp_ovf[0] & rmode_00) | inf_out | (f2i_max & op_f2i) ) begin
-	exp_out_final = 8'hff;
-	end else if (max_num) begin 
-	exp_out_final = 8'hfe;
-	end else begin 
-	exp_out_final = exp_out_rnd;
-	end
-end
+assign exp_out_final =	((op_div & exp_ovf[1] & !exp_ovf[0]) | output_zero ) ? 8'h00 :
+			((op_div & exp_ovf[1] &  exp_ovf[0] & rmode_00) | inf_out | (f2i_max & op_f2i) ) ? 8'hff :
+			max_num ? 8'hfe :
+			exp_out_rnd;
 
-//Final Output Mux : Pack Result
 
-always_comb begin 
-    out = {exp_out_final, fract_out_final};
-end
+// ---------------------------------------------------------------------
+// Pack Result
 
-//Exceptions
+assign out = {exp_out_final, fract_out_final};
 
-// intermediate signals
-logic underflow_fmul, overflow_fdiv, undeflow_div, z, f2i_ine;
+// ---------------------------------------------------------------------
+// Exceptions
+wire		underflow_fmul;
+wire		overflow_fdiv;
+wire		undeflow_div;
 
-always_comb begin  // To Define the Z signal 
-    z =	shft_co | ( exp_ovf[1] |  exp_in_00) |
+wire		z =	shft_co | ( exp_ovf[1] |  exp_in_00) |
 			(!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00));
-end
 
- always_comb begin // To calculate underflow_fmul 
-    underflow_fmul = ( (|fract_trunc) & z & !exp_in_ff ) |
+assign underflow_fmul = ( (|fract_trunc) & z & !exp_in_ff ) |
 			(fract_out_00 & !fract_in_00 & exp_ovf[1]);
-end
 
-always_comb begin  //To calculate undeflow_div
-  undeflow_div =  !(exp_ovf[1] &  exp_ovf[0] & rmode_00) & !inf_out & !max_num & exp_out_final!=8'hff & (                                        ///////////////under_div
+assign undeflow_div =	!(exp_ovf[1] &  exp_ovf[0] & rmode_00) & !inf_out & !max_num & exp_out_final!=8'hff & (
 
 			((|fract_trunc) & !opb_dn & (
 							( op_dn & !exp_ovf[1] & exp_ovf[0])	|
@@ -525,164 +510,167 @@ always_comb begin  //To calculate undeflow_div
 			)
 
 			);
-end
 
-// to calculate underflow based on operations type
-always_comb begin 
-  underflow =  op_div ? undeflow_div : op_mul ? underflow_fmul : (!fract_in[47] & exp_out1_co) & !dn;          //////////////////////////////////////////underflow
-end
+assign underflow = op_div ? undeflow_div : op_mul ? underflow_fmul : (!fract_in[47] & exp_out1_co) & !dn;
 
-// To calculate overflow_fdiv
-always_comb begin 
-	overflow_fdiv =	inf_out |
+assign overflow_fdiv =	inf_out |
 			(!rmode_00 & max_num) |
 			(exp_in[7] & op_dn & exp_out_ff) |
 			(exp_ovf[0] & (exp_ovf[1] | exp_out_ff) );
-end
 
-// To calculate overflow 
-always_comb begin 
-    overflow  = op_div ? overflow_fdiv : (ovf0 | ovf1);
-end
+assign overflow  = op_div ? overflow_fdiv : (ovf0 | ovf1);
 
-// To calculate f2i_line 
-always_comb begin 
-    f2i_ine =	(f2i_zero & !fract_in_00 & !opas) |
+wire		f2i_ine;
+
+assign f2i_ine =	(f2i_zero & !fract_in_00 & !opas) |
 			(|fract_trunc) |
 			(f2i_zero & (exp_in<8'h80) & opas & !fract_in_00) |
 			(f2i_max & rmode_11 & (exp_in<8'h80));
-end
 
-// to calculate based on operation type 
-always_comb begin 
-    ine = op_f2i ? f2i_ine :
+
+
+assign ine =	op_f2i ? f2i_ine :
 		op_i2f ? (|fract_trunc) :
 		((r & !dn) | (s & !dn) | max_num | (op_div & !rem_00));
-end
 
-// Debugging 
-// Defining wires for debugging 
+// ---------------------------------------------------------------------
+// Debugging Stuff
 
-logic	[26:0]	fracta_del, fractb_del;
-logic	[2:0]	grs_del;
-logic		dn_del;
-logic	[7:0]	exp_in_del, exp_out_del;
-logic 	[22:0]	fract_out_del;
-logic	[47:0]	fract_in_del;
-logic		overflow_del;
-logic	[1:0]	exp_ovf_del;
-logic	[22:0]	fract_out_x_del, fract_out_rnd2a_del;
-logic	[24:0]	trunc_xx_del;
-logic 		exp_rnd_adj2a_del;
-logic	[22:0]	fract_dn_del;
-logic	[4:0]	div_opa_ldz_del;
-logic	[23:0]	fracta_div_del;
-logic	[23:0]	fractb_div_del;
-logic		div_inf_del;
-logic	[7:0]	fi_ldz_2_del;
-logic		inf_out_del, max_out_del;
-logic	[5:0]	fi_ldz_del;
-logic		rx_del;
-logic		ez_del;
-logic		lr;
-logic	[7:0]	shr, shl, exp_div_del;
+// synopsys translate_off
 
-delay2 #(.N(26)) ud000 (.clk(clk), .in(test.u0.fracta), .out(fracta_del));
-delay2 #(.N(26)) ud001 (.clk(clk), .in(test.u0.fractb), .out(fractb_del));
-delay1 #(.N(2)) ud002 (.clk(clk), .in({g, r, s}), .out(grs_del));
-delay1 #(.N(0)) ud004 (.clk(clk), .in(dn), .out(dn_del));
-delay1 #(.N(7)) ud005 (.clk(clk), .in(exp_in), .out(exp_in_del));
-delay1 #(.N(7)) ud007 (.clk(clk), .in(exp_out_rnd), .out(exp_out_del));
-delay1 #(.N(47)) ud009 (.clk(clk), .in(fract_in), .out(fract_in_del));
-delay1 #(.N(0)) ud010 (.clk(clk), .in(overflow), .out(overflow_del));
-delay1 #(.N(1)) ud011 (.clk(clk), .in(exp_ovf), .out(exp_ovf_del));
-delay1 #(.N(22)) ud014 (.clk(clk), .in(fract_out), .out(fract_out_x_del));
-delay1 #(.N(24)) ud015 (.clk(clk), .in(fract_trunc), .out(trunc_xx_del));
-delay1 #(.N(0)) ud017 (.clk(clk), .in(exp_rnd_adj2a), .out(exp_rnd_adj2a_del));
-delay1 #(.N(4)) ud019 (.clk(clk), .in(div_opa_ldz), .out(div_opa_ldz_del));
-delay3 #(.N(23)) ud020 (.clk(clk), .in(test.u0.fdiv_opa[49:26]), .out(fracta_div_del));
-delay3 #(.N(23)) ud021 (.clk(clk), .in(test.u0.fractb_mul), .out(fractb_div_del));
-delay1 #(.N(0)) ud023 (.clk(clk), .in(div_inf), .out(div_inf_del));
-delay1 #(.N(7)) ud024 (.clk(clk), .in(fi_ldz_2), .out(fi_ldz_2_del));
-delay1 #(.N(0)) ud025 (.clk(clk), .in(inf_out), .out(inf_out_del));
-delay1 #(.N(0)) ud026 (.clk(clk), .in(max_num), .out(max_num_del));
-delay1 #(.N(5)) ud027 (.clk(clk), .in(fi_ldz), .out(fi_ldz_del));
-delay1 #(.N(0)) ud028 (.clk(clk), .in(rem_00), .out(rx_del));
+wire	[26:0]	fracta_del, fractb_del;
+wire	[2:0]	grs_del;
+wire		dn_del;
+wire	[7:0]	exp_in_del;
+wire	[7:0]	exp_out_del;
+wire	[22:0]	fract_out_del;
+wire	[47:0]	fract_in_del;
+wire		overflow_del;
+wire	[1:0]	exp_ovf_del;
+wire	[22:0]	fract_out_x_del, fract_out_rnd2a_del;
+wire	[24:0]	trunc_xx_del;
+wire		exp_rnd_adj2a_del;
+wire	[22:0]	fract_dn_del;
+wire	[4:0]	div_opa_ldz_del;
+wire	[23:0]	fracta_div_del;
+wire	[23:0]	fractb_div_del;
+wire		div_inf_del;
+wire	[7:0]	fi_ldz_2_del;
+wire		inf_out_del, max_out_del;
+wire	[5:0]	fi_ldz_del;
+wire		rx_del;
+wire		ez_del;
+wire		lr;
+wire	[7:0]	shr, shl, exp_div_del;
 
-delay1 #(.N(0)) ud029 (.clk(clk), .in(left_right), .out(lr));
-delay1 #(.N(7)) ud030 (.clk(clk), .in(shift_right), .out(shr));
-delay1 #(.N(7)) ud031 (.clk(clk), .in(shift_left), .out(shl));
-delay1 #(.N(22)) ud032 (.clk(clk), .in(fract_out_rnd2a), .out(fract_out_rnd2a_del));
+delay2 #26 ud000(clk, test.u0.fracta, fracta_del);
+delay2 #26 ud001(clk, test.u0.fractb, fractb_del);
+delay1  #2 ud002(clk, {g,r,s}, grs_del);
+delay1  #0 ud004(clk, dn, dn_del);
+delay1  #7 ud005(clk, exp_in, exp_in_del);
+delay1  #7 ud007(clk, exp_out_rnd, exp_out_del);
+delay1 #47 ud009(clk, fract_in, fract_in_del);
+delay1  #0 ud010(clk, overflow, overflow_del);
+delay1  #1 ud011(clk, exp_ovf, exp_ovf_del);
+delay1 #22 ud014(clk, fract_out, fract_out_x_del);
+delay1 #24 ud015(clk, fract_trunc, trunc_xx_del);
+delay1 	#0 ud017(clk, exp_rnd_adj2a, exp_rnd_adj2a_del);
+delay1  #4 ud019(clk, div_opa_ldz, div_opa_ldz_del);
+delay3 #23 ud020(clk, test.u0.fdiv_opa[49:26],	fracta_div_del);
+delay3 #23 ud021(clk, test.u0.fractb_mul,	fractb_div_del);
+delay1 	#0 ud023(clk, div_inf, div_inf_del);
+delay1  #7 ud024(clk, fi_ldz_2, fi_ldz_2_del);
+delay1 	#0 ud025(clk, inf_out, inf_out_del);
+delay1 	#0 ud026(clk, max_num, max_num_del);
+delay1 	#5 ud027(clk, fi_ldz, fi_ldz_del);
+delay1  #0 ud028(clk, rem_00, rx_del);
 
-delay1 #(.N(7)) ud033 (.clk(clk), .in(exp_div), .out(exp_div_del));
+delay1  #0 ud029(clk, left_right, lr);
+delay1  #7 ud030(clk, shift_right, shr);
+delay1  #7 ud031(clk, shift_left, shl);
+delay1 #22 ud032(clk, fract_out_rnd2a, fract_out_rnd2a_del);
 
-always_ff @(posedge test.error_event) begin 
-    $display("\n----------------------------------------------");
-	
-	$display("ERROR: GRS: %b exp_ovf: %b dn: %h exp_in: %h exp_out: %h, exp_rnd_adj2a: %b", grs_del, exp_ovf_del, dn_del, exp_in_del, exp_out_del, exp_rnd_adj2a_del);
-	
-	$display("      div_opa: %b, div_opb: %b, rem_00: %b, exp_div: %h", fracta_div_del, fractb_div_del, rx_del, exp_div_del);
-	
-	$display("      lr: %b, shl: %h, shr: %h", lr, shl, shr);
-	
-	$display("       overflow: %b, fract_in=%b  fa:%h fb:%h", overflow_del, fract_in_del, fracta_del, fractb_del);
+delay1  #7 ud033(clk, exp_div, exp_div_del);
 
-	$display("       div_opa_ldz: %h, div_inf: %b, inf_out: %b, max_num: %b, fi_ldz: %h, fi_ldz_2: %h", div_opa_ldz_del, div_inf_del, inf_out_del, max_num_del, fi_ldz_del, fi_ldz_2_del);
+always @(test.error_event)
+   begin
 
-    $display("       fract_out_x: %b, fract_out_rnd2a_del: %h, fract_trunc: %b\n", fract_out_x_del, fract_out_rnd2a_del, trunc_xx_del);
+	$display("\n----------------------------------------------");
 
-end 
+	$display("ERROR: GRS: %b exp_ovf: %b dn: %h exp_in: %h exp_out: %h, exp_rnd_adj2a: %b",
+			grs_del, exp_ovf_del, dn_del, exp_in_del, exp_out_del, exp_rnd_adj2a_del);
 
-// Delay modules 
-module delay1 #(parameter N = 1) (input logic clk, input logic [N:0] in, output logic [N:0] out);
-    always_ff @(posedge clk) begin 
+	$display("      div_opa: %b, div_opb: %b, rem_00: %b, exp_div: %h",
+			fracta_div_del, fractb_div_del, rx_del, exp_div_del);
+
+	$display("      lr: %b, shl: %h, shr: %h",
+			lr, shl, shr);
+
+
+	$display("       overflow: %b, fract_in=%b  fa:%h fb:%h",
+			overflow_del, fract_in_del, fracta_del, fractb_del);
+
+	$display("       div_opa_ldz: %h, div_inf: %b, inf_out: %b, max_num: %b, fi_ldz: %h, fi_ldz_2: %h",
+			div_opa_ldz_del, div_inf_del, inf_out_del, max_num_del, fi_ldz_del, fi_ldz_2_del);
+
+	$display("       fract_out_x: %b, fract_out_rnd2a_del: %h, fract_trunc: %b\n",
+			fract_out_x_del, fract_out_rnd2a_del, trunc_xx_del);
+   end
+
+
+// synopsys translate_on
+
+endmodule
+
+// synopsys translate_off
+
+module delay1(clk, in, out);
+parameter	N = 1;
+input	[N:0]	in;
+output	[N:0]	out;
+input		clk;
+
+reg	[N:0]	out;
+
+always @(posedge clk)
 	out <= #1 in;
-	end
+
 endmodule
 
-module delay2 #(parameter N = 1) (input logic clk, input logic [N:0] in, output logic [N:0] out);
-logic [N:0] r1;
-    always_ff @(posedge clk) begin 
+
+module delay2(clk, in, out);
+parameter	N = 1;
+input	[N:0]	in;
+output	[N:0]	out;
+input		clk;
+
+reg	[N:0]	out, r1;
+
+always @(posedge clk)
 	r1 <= #1 in;
-	end
-	
-	always_ff @(posedge clk) begin 
+
+always @(posedge clk)
 	out <= #1 r1;
-	end
+
 endmodule
 
-module delay3 #(parameter N = 1) (input logic clk, input logic [N:0] in, output logic [N:0] out);
-logic [N:0] r1,r2;
- always_ff @(posedge clk) begin 
+module delay3(clk, in, out);
+parameter	N = 1;
+input	[N:0]	in;
+output	[N:0]	out;
+input		clk;
+
+reg	[N:0]	out, r1, r2;
+
+always @(posedge clk)
 	r1 <= #1 in;
-	end
 
-always_ff @(posedge clk) begin 
+always @(posedge clk)
 	r2 <= #1 r1;
-	end
 
-always_ff @(posedge clk) begin 
-	out  <= #1 r2;
-	end
-	
-endmodule
-
-
-
-
+always @(posedge clk)
+	out <= #1 r2;
 
 endmodule
 
-
-
-
-
-
-
-
-
-	
-
-
-
-
+// synopsys translate_on
