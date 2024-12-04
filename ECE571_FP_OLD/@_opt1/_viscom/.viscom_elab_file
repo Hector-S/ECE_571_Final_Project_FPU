@@ -1,0 +1,1 @@
+/pkgs/mentor/questa/2024.2/questasim/linux_x86_64/VisualizerRls/bin/viscom -nolock -quiet -jmem_size 1130784 ECE571_FP_OLD.test -quiet -auto_acc_if_foreign -work ECE571_FP_OLD +acc -allow_unnamed -o _opt1 -id 1-5254006cf05e-67507ce7-7672-23a0 +__design_bin_path+/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU +__betafsm

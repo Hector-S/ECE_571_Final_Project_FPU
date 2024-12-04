@@ -1,0 +1,149 @@
+# Reading pref.tcl
+# //  Questa Sim-64
+# //  Version 2024.2 linux_x86_64 May 20 2024
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# reading modelsim.ini
+# Loading project ECE571_FP
+# Compile of primitives.sv was successful.
+# Compile of fpu.sv was successful.
+# Compile of except.sv was successful.
+# Compile of post_norm.sv was successful with warnings.
+# Compile of pre_norm.sv was successful.
+# Compile of pre_norm_fmul.sv was successful with warnings.
+# Compile of test_top.sv was successful.
+# 7 compiles, 0 failed with no errors.
+vsim -voptargs=+acc ECE571_FP.test
+# vsim -voptargs="+acc" ECE571_FP.test 
+# Start time: 07:51:12 on Dec 04,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility. The +acc switch would be deprecated in a future release.
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(388): Module 'delay1' is not defined.
+#  For instance 'ud000' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(389): Module 'delay1' is not defined.
+#  For instance 'ud001' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(390): Module 'delay1' is not defined.
+#  For instance 'ud002' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(391): Module 'delay1' is not defined.
+#  For instance 'ud003' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(392): Module 'delay1' is not defined.
+#  For instance 'ud004' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(393): Module 'delay1' is not defined.
+#  For instance 'ud005' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(394): Module 'delay1' is not defined.
+#  For instance 'ud006' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(396): Module 'delay1' is not defined.
+#  For instance 'ud007' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(397): Module 'delay1' is not defined.
+#  For instance 'ud008' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(399): Module 'delay1' is not defined.
+#  For instance 'ud009' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(401): Module 'delay3' is not defined.
+#  For instance 'ud010' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(403): Module 'delay1' is not defined.
+#  For instance 'ud012' at path 'test.u0'
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=12, Warnings=1.
+# Error loading design
+# End time: 07:51:13 on Dec 04,2024, Elapsed time: 0:00:01
+# Errors: 12, Warnings: 4
+# Errors: 0, Warnings: 0
+# Compile of primitives.sv was successful.
+# Errors: 0, Warnings: 0
+# Compile of fpu.sv was successful.
+# Errors: 0, Warnings: 0
+# Compile of except.sv was successful.
+# Errors: 0, Warnings: 9
+# Compile of post_norm.sv was successful.
+# Errors: 0, Warnings: 0
+# Compile of pre_norm.sv was successful.
+# Errors: 0, Warnings: 2
+# Compile of pre_norm_fmul.sv was successful.
+# Errors: 0, Warnings: 0
+# Compile of test_top.sv was successful.
+vsim -voptargs=+acc ECE571_FP.test
+# vsim -voptargs="+acc" ECE571_FP.test 
+# Start time: 07:51:33 on Dec 04,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility. The +acc switch would be deprecated in a future release.
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(388): Module 'delay1' is not defined.
+#  For instance 'ud000' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(389): Module 'delay1' is not defined.
+#  For instance 'ud001' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(390): Module 'delay1' is not defined.
+#  For instance 'ud002' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(391): Module 'delay1' is not defined.
+#  For instance 'ud003' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(392): Module 'delay1' is not defined.
+#  For instance 'ud004' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(393): Module 'delay1' is not defined.
+#  For instance 'ud005' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(394): Module 'delay1' is not defined.
+#  For instance 'ud006' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(396): Module 'delay1' is not defined.
+#  For instance 'ud007' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(397): Module 'delay1' is not defined.
+#  For instance 'ud008' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(399): Module 'delay1' is not defined.
+#  For instance 'ud009' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(401): Module 'delay3' is not defined.
+#  For instance 'ud010' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(403): Module 'delay1' is not defined.
+#  For instance 'ud012' at path 'test.u0'
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=12, Warnings=1.
+# Error loading design
+# End time: 07:51:34 on Dec 04,2024, Elapsed time: 0:00:01
+# Errors: 12, Warnings: 3
+# Compile of primitives.sv was successful.
+# Compile of fpu.sv was successful.
+# Compile of except.sv was successful.
+# Compile of post_norm.sv was successful with warnings.
+# Compile of pre_norm.sv was successful.
+# Compile of pre_norm_fmul.sv was successful with warnings.
+# Compile of test_top.sv was successful.
+# 7 compiles, 0 failed with no errors.
+vsim -voptargs=+acc ECE571_FP.test
+# vsim -voptargs="+acc" ECE571_FP.test 
+# Start time: 07:52:50 on Dec 04,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility. The +acc switch would be deprecated in a future release.
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(388): Module 'delay1' is not defined.
+#  For instance 'ud000' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(389): Module 'delay1' is not defined.
+#  For instance 'ud001' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(390): Module 'delay1' is not defined.
+#  For instance 'ud002' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(391): Module 'delay1' is not defined.
+#  For instance 'ud003' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(392): Module 'delay1' is not defined.
+#  For instance 'ud004' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(393): Module 'delay1' is not defined.
+#  For instance 'ud005' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(394): Module 'delay1' is not defined.
+#  For instance 'ud006' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(396): Module 'delay1' is not defined.
+#  For instance 'ud007' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(397): Module 'delay1' is not defined.
+#  For instance 'ud008' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(399): Module 'delay1' is not defined.
+#  For instance 'ud009' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(401): Module 'delay3' is not defined.
+#  For instance 'ud010' at path 'test.u0'
+# ** Error: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv(403): Module 'delay1' is not defined.
+#  For instance 'ud012' at path 'test.u0'
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=12, Warnings=1.
+# Error loading design
+# End time: 07:52:51 on Dec 04,2024, Elapsed time: 0:00:01
+# Errors: 12, Warnings: 3
