@@ -1,12 +1,9 @@
-BEGIN 1:post_norm:fast:ECE571_FP
-    exp_out1_co :  1:fpu:fast:ECE571_FP
-END 
 BEGIN 1:fpu:fast:ECE571_FP
-    fractb_mul :  1:post_norm:fast:ECE571_FP
     fracta :  1:post_norm:fast:ECE571_FP
     fdiv_opa :  1:post_norm:fast:ECE571_FP
     fractb :  1:post_norm:fast:ECE571_FP
+    fractb_mul :  1:post_norm:fast:ECE571_FP
 END 
 BEGIN 1:test:fast:ECE571_FP
-    error_event :  1:post_norm:fast:ECE571_FP 1:fpu:fast:ECE571_FP
+    error_event :  1:post_norm:fast:ECE571_FP
 END 

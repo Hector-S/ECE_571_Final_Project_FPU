@@ -1,18 +1,18 @@
-/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm.v {1 {vlog -work ECE571_FP -vopt -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm.v
+/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv {1 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
 -- Compiling module pre_norm
 
 Top level modules:
 	pre_norm
 
-} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/fpu.v {1 {vlog -work ECE571_FP -vopt -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/fpu.v
+} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv {1 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
 -- Compiling module fpu
 
 Top level modules:
 	fpu
 
-} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/primitives.v {1 {vlog -work ECE571_FP -vopt -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/primitives.v
+} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/primitives.sv {1 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/primitives.sv
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
 -- Compiling module add_sub27
 -- Compiling module mul_r2
@@ -23,35 +23,46 @@ Top level modules:
 	mul_r2
 	div_r2
 
-} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/test_bench/test_top.sv {1 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/test_bench/test_top.sv
+} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv {1 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
 -- Compiling module test
 
 Top level modules:
 	test
 
-} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/except.v {1 {vlog -work ECE571_FP -vopt -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/except.v
+} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv {2 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
--- Compiling module except
+-- Compiling module pre_norm_fmul
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv(61): (vlog-2182) 'exp_out_a' might be read before written in always_comb or always @* block.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv(61): (vlog-2182) 'exp_ovf_d[1]' might be read before written in always_comb or always @* block.
 
 Top level modules:
-	except
+	pre_norm_fmul
 
-} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/post_norm.v {1 {vlog -work ECE571_FP -vopt -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/post_norm.v
+} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv {2 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
 -- Compiling module post_norm
 -- Compiling module delay1
 -- Compiling module delay2
 -- Compiling module delay3
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(169): (vlog-2697) MSB 6 of part-select into 'exp_in' is out of bounds.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(208): (vlog-2182) 'div_scht1a' might be read before written in always_comb or always @* block.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(226): (vlog-2182) 'lr_mul' might be read before written in always_comb or always @* block.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(226): (vlog-2182) 'lr_div' might be read before written in always_comb or always @* block.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(249): (vlog-2697) MSB 7 of part-select into 'exp_in' is out of bounds.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(277): (vlog-2182) 'exp_out' might be read before written in always_comb or always @* block.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(285): (vlog-2182) 'exp_out1_co' might be read before written in always_comb or always @* block.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(281): (vlog-2182) 'exp_out1' might be read before written in always_comb or always @* block.
+** Warning: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv(300): (vlog-2182) 'fi_ldz_2' might be read before written in always_comb or always @* block.
 
 Top level modules:
 	post_norm
 
-} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm_fmul.v {1 {vlog -work ECE571_FP -vopt -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm_fmul.v
+} {} {}} /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/except.sv {1 {vlog -work work -vopt -sv -stats=none /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/except.sv
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
--- Compiling module pre_norm_fmul
+-- Compiling module except
 
 Top level modules:
-	pre_norm_fmul
+	except
 
 } {} {}}

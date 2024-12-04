@@ -1,14 +1,8 @@
 m255
 K4
 z2
-Z0 !s12c _opt
-Z1 !s99 nomlopt
-R0
-R1
-!s12c _opt1
-R1
-R0
-R1
+!s12c _opt
+Z0 !s99 nomlopt
 !s11f vlog 2024.2 2024.05, May 20 2024
 13
 !s112 1.1
@@ -16,312 +10,245 @@ R1
 !i10e 25
 !i10f 100
 cModel Technology
-Z2 d/u/sotohec/ECE571-F24/hw3-Hector-S
+Z1 d/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU
 T_opt
-!s110 1733080531
-VoPLFmHodKB[VZ2An0k`?=0
-Z3 04 4 4 work test fast 0
-=1-5254006cf05e-674cb5d2-5d0d8-1d11
-R1
-Z4 !s12f OEM100
-Z5 !s12b OEM100
-Z6 !s124 OEM100
-Z7 !s135 nogc
-o-quiet -auto_acc_if_foreign -work ECE571_FP
-Z8 tCvgOpt 0
+!s110 1733330158
+VcIU^^h=k7N8ZDU]lV[5n=0
+04 4 4 work test fast 0
+=9-5254006cf05e-675084ed-74389-489
+R0
+!s12f OEM100
+!s12b OEM100
+!s124 OEM100
+!s135 nogc
+o-quiet -auto_acc_if_foreign -work ECE571_FP +acc
+Z2 tCvgOpt 0
 n@_opt
-Z9 OL;O;2024.2;79
-T_opt1
-!s110 1733077341
-Vl?Kc^>;1AcToOY9V7U<CU1
-R3
-=1-5254006cf05e-674ca95c-6fbce-167a
+OL;O;2024.2;79
 R1
+vadd_sub27
+Z3 2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/primitives.sv
+Z4 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z5 !s110 1733330264
+!i10b 1
+!s100 KkAb^egHE6X@U?Tz]AbOF1
+IaQ:XbWAlL>oMX1Nf_kTH71
+S1
+R1
+Z6 w1733320293
+Z7 8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/primitives.sv
+Z8 F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/primitives.sv
+!i122 94
+L0 9 11
+Z9 VDg1SIo80bB@j0V0VzS_@n1
+Z10 OL;L;2024.2;79
+r1
+!s85 0
+31
+Z11 !s108 1733330263.000000
+Z12 !s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/primitives.sv|
+Z13 !s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/primitives.sv|
+!i113 0
+Z14 o-work work -sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R2
+vdiv_r2
+R3
 R4
 R5
+!i10b 1
+!s100 3eNFfYOm;S5;0:nn:[Rnz2
+I5h7`k^VWULJDQ1Jb^jf<L0
+S1
+R1
 R6
 R7
-o-quiet -auto_acc_if_foreign -work ECE571_FP +acc
 R8
-n@_opt1
+!i122 94
+L0 47 18
 R9
+R10
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 0
+R14
 R2
-vadd_sub27
-Z10 2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/primitives.v
-Z11 !s110 1733080526
-!i10b 1
-!s100 d;?a>d6Hih40i9M_hOW7]2
-I1`2l00F<IX6M<0J;abBWY1
-Z12 d/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU
-Z13 w1733076707
-Z14 8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/primitives.v
-Z15 F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/primitives.v
-!i122 41
-L0 44 11
-Z16 VDg1SIo80bB@j0V0VzS_@n1
-Z17 OL;L;2024.2;79
-r1
-!s85 0
-31
-Z18 !s108 1733080526.000000
-Z19 !s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/primitives.v|
-Z20 !s90 -reportprogress|300|-work|ECE571_FP|-vopt|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/primitives.v|
-!i113 0
-Z21 o-work ECE571_FP -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
-R8
-vdelay1
-Z22 2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/post_norm.v
-Z23 !s110 1733080525
-!i10b 1
-!s100 JTdI8]=X7WTRARMCkAd9U1
-IYKX^jH=a]mEVQLCnE3J000
-R12
-R13
-Z24 8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/post_norm.v
-Z25 F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/post_norm.v
-!i122 38
-L0 627 12
-R16
-R17
-r1
-!s85 0
-31
-Z26 !s108 1733080525.000000
-Z27 !s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/post_norm.v|
-Z28 !s90 -reportprogress|300|-work|ECE571_FP|-vopt|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/post_norm.v|
-!i113 0
-R21
-R8
-vdelay2
-R22
-R23
-!i10b 1
-!s100 [I][UPd1h>f@=4g5cOm1J1
-IlO?e8G6OTVl>cgk>zN]=h2
-R12
-R13
-R24
-R25
-!i122 38
-L0 641 15
-R16
-R17
-r1
-!s85 0
-31
-R26
-R27
-R28
-!i113 0
-R21
-R8
-vdelay3
-R22
-R23
-!i10b 1
-!s100 NOIme__hEgfzko`T<_NSZ2
-IB?l0iNNG2B7k<h=SUcCiN2
-R12
-R13
-R24
-R25
-!i122 38
-L0 657 18
-R16
-R17
-r1
-!s85 0
-31
-R26
-R27
-R28
-!i113 0
-R21
-R8
-vdiv_r2
-R10
-R11
-!i10b 1
-!s100 OjYPIH0957HEO?1WMmoP70
-ILl^RBjB<kSg`58]FbL`Mc1
-R12
-R13
-R14
-R15
-!i122 41
-L0 81 21
-R16
-R17
-r1
-!s85 0
-31
-R18
-R19
-R20
-!i113 0
-R21
-R8
 vexcept
-2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/except.v
-R23
+2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/except.sv
+R4
+R5
 !i10b 1
-!s100 ;FP8Rl;TeI>=lYQ]J2Kg:2
-IZ9XJDfblCPlJ2Tk9m[8]30
-R12
-R13
-8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/except.v
-F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/except.v
-!i122 36
-L0 39 114
-R16
-R17
-r1
-!s85 0
-31
-!s108 1733080524.000000
-!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/except.v|
-!s90 -reportprogress|300|-work|ECE571_FP|-vopt|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/except.v|
-!i113 0
-R21
-R8
-vfpu
-2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/fpu.v
-R23
-!i10b 1
-!s100 DU1NKd7Li:OjAQNkddM4A1
-Ih>:40bi1cUeC@nFLQNODF0
-R12
-R13
-8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/fpu.v
-F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/fpu.v
-!i122 37
-L0 62 499
-R16
-R17
-r1
-!s85 0
-31
-R26
-!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/fpu.v|
-!s90 -reportprogress|300|-work|ECE571_FP|-vopt|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/fpu.v|
-!i113 0
-R21
-R8
-vmul_r2
-R10
-R11
-!i10b 1
-!s100 KZPo@Q=;TgbUCZ>eSDha92
-Ia?N[B81_lA>Q7dQzR:4A30
-R12
-R13
-R14
-R15
-!i122 41
-L0 61 14
-R16
-R17
-r1
-!s85 0
-31
-R18
-R19
-R20
-!i113 0
-R21
-R8
-vpost_norm
-R22
-R23
-!i10b 1
-!s100 3jZ?OiNhU3^IATeUP9^eV2
-IN9UQmGBG>Qm^Fc9h>hn@:3
-R12
-R13
-R24
-R25
-!i122 38
-L0 38 586
-R16
-R17
-r1
-!s85 0
-31
-R26
-R27
-R28
-!i113 0
-R21
-R8
-vpre_norm
-2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm.v
-R23
-!i10b 1
-!s100 GT1Uafkdm>?>Gz`hWdcC@2
-I80JT=2SlSa:ha_>_BDZ2I2
-R12
-R13
-8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm.v
-F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm.v
-!i122 39
-L0 38 233
-R16
-R17
-r1
-!s85 0
-31
-R26
-!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm.v|
-!s90 -reportprogress|300|-work|ECE571_FP|-vopt|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm.v|
-!i113 0
-R21
-R8
-vpre_norm_fmul
-2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm_fmul.v
-R11
-!i10b 1
-!s100 add?iGOVd>CnBgGC_kJCA0
-IM8<k?DJm^D9Bo:G>2_?<B0
-R12
-R13
-8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm_fmul.v
-F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm_fmul.v
-!i122 40
-L0 37 114
-R16
-R17
-r1
-!s85 0
-31
-R26
-!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm_fmul.v|
-!s90 -reportprogress|300|-work|ECE571_FP|-vopt|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/verilog/pre_norm_fmul.v|
-!i113 0
-R21
-R8
-vtest
-2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/test_bench/test_top.sv
-DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
-R11
-!i10b 1
-!s100 8bhzQ<Y>>=^W`jnA6Zjei1
-I9WHNTA<X6f;zU_U:PLB<43
+!s100 0T7F2XdB=Sd^UhR62^59_1
+IY1M_PoD=N>n9eL4H:jSOz0
 S1
-R12
-w1733080403
-8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/test_bench/test_top.sv
-F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/test_bench/test_top.sv
-Ftest_bench/sel_test.vh
-!i122 42
-L0 40 1395
+R1
+Z15 w1733321130
+8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/except.sv
+F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/except.sv
+!i122 96
+L0 3 50
+R9
+R10
+r1
+!s85 0
+31
+Z16 !s108 1733330264.000000
+!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/except.sv|
+!s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/except.sv|
+!i113 0
+R14
+R2
+vfpu
+2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv
+R4
+R5
+!i10b 1
+!s100 D[ECLCba?nlidVkec3_:f1
+Inb0NP6MhXEdQ59md9e2320
+S1
+R1
+w1733330144
+8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv
+F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv
+!i122 95
+L0 2 466
+R9
+R10
+r1
+!s85 0
+31
 R16
+!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv|
+!s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/fpu.sv|
+!i113 0
+R14
+R2
+vmul_r2
+R3
+R4
+R5
+!i10b 1
+!s100 6z?Gg]b2P6HVIgzO@cZzj3
+Ih8DHR;8cafbgmEkmk9C8<1
+S1
+R1
+R6
+R7
+R8
+!i122 94
+L0 26 15
+R9
+R10
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 0
+R14
+R2
+vpost_norm
+2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv
+R4
+Z17 !s110 1733330265
+!i10b 1
+!s100 d?LDeaQ4L6_:V<Rok@hG?3
+IMZbVdzh1mO60PEcBj3=kX3
+S1
+R1
+R6
+8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv
+F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv
+!i122 97
+L0 3 21
+R9
+R10
+r1
+!s85 0
+31
+R16
+!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv|
+!s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/post_norm.sv|
+!i113 0
+R14
+R2
+vpre_norm
+2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv
+R4
 R17
+!i10b 1
+!s100 <@H?5XzNcVYbj4]1RbW0H2
+IbV7@:DSFC>CgIF09X<JaP2
+S1
+R1
+R6
+8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv
+F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv
+!i122 98
+L0 2 195
+R9
+R10
+r1
+!s85 0
+31
+Z18 !s108 1733330265.000000
+!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv|
+!s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv|
+!i113 0
+R14
+R2
+vpre_norm_fmul
+2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv
+R4
+R17
+!i10b 1
+!s100 S:maVV0THeeO@Dg?6k=cV2
+IT;T5;2GhK@5O<@Tdm5dYH2
+S1
+R1
+R15
+8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv
+F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv
+!i122 99
+L0 3 109
+R9
+R10
 r1
 !s85 0
 31
 R18
-!s107 test_bench/sel_test.vh|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/test_bench/test_top.sv|
-!s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/test_bench/test_top.sv|
+!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv|
+!s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm_fmul.sv|
 !i113 0
-o-work work -sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
-R8
+R14
+R2
+vtest
+2/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv
+R4
+R17
+!i10b 1
+!s100 am_jH5QjD5TjTHGHP>VJQ3
+I318b7_7A8m<^Lk[Xm^0dH2
+S1
+R1
+w1733323759
+8/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv
+F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv
+F/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/sel_test.vh
+!i122 100
+L0 40 1395
+R9
+R10
+r1
+!s85 0
+31
+R18
+!s107 /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/sel_test.vh|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv|
+!s90 -reportprogress|300|-work|work|-vopt|-sv|-stats=none|/u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv|
+!i113 0
+R14
+R2
