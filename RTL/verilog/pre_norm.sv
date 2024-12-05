@@ -1,87 +1,55 @@
-/////////////////////////////////////////////////////////////////////
-////                                                             ////
-////  Pre Normalize                                              ////
-////  Pre Normalization Unit for Add/Sub Operations              ////
-////                                                             ////
-////  Author: Rudolf Usselmann                                   ////
-////          rudi@asics.ws                                      ////
-////                                                             ////
-/////////////////////////////////////////////////////////////////////
-////                                                             ////
-//// Copyright (C) 2000 Rudolf Usselmann                         ////
-////                    rudi@asics.ws                            ////
-////                                                             ////
-//// This source file may be used and distributed without        ////
-//// restriction provided that this copyright statement is not   ////
-//// removed from the file and that any derivative work contains ////
-//// the original copyright notice and the associated disclaimer.////
-////                                                             ////
-////     THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY     ////
-//// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED   ////
-//// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS   ////
-//// FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHOR      ////
-//// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,         ////
-//// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES    ////
-//// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE   ////
-//// GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR        ////
-//// BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF  ////
-//// LIABILITY, WHETHER IN  CONTRACT, STRICT LIABILITY, OR TORT  ////
-//// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  ////
-//// OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE         ////
-//// POSSIBILITY OF SUCH DAMAGE.                                 ////
-////                                                             ////
-/////////////////////////////////////////////////////////////////////
+/* post_norm.sv
+** Conversion of Verilog code into SystemVerilog
+** ECE 571 Group 17 Project
+** 
+** Converting Verilog from Rudolf Usselmann (rudi@asics.ws)
+*/
 
 `timescale 1ns / 100ps
 
 
-module pre_norm(clk, rmode, add, opa, opb, opa_nan, opb_nan, fracta_out,
-		fractb_out, exp_dn_out, sign, nan_sign, result_zero_sign,
-		fasu_op);
-input		clk;
-input	[1:0]	rmode;
-input		add;
-input	[31:0]	opa, opb;
-input		opa_nan, opb_nan;
-output	[26:0]	fracta_out, fractb_out;
-output	[7:0]	exp_dn_out;
-output		sign;
-output		nan_sign, result_zero_sign;
-output		fasu_op;			// Operation Output
+module pre_norm (
+	input logic 		clk,
+	input logic  [1:0]	rmode,
+	input logic 		add,
+	input logic  [31:0]	opa, opb,
+	input logic 		opa_nan, opb_nan,
+	output logic [26:0]	fracta_out, fractb_out,
+	output logic [7:0]	exp_dn_out,
+	output logic 		sign,			// sign output
+	output logic 		nan_sign, result_zero_sign,
+	output logic 		fasu_op			// // operation (add/sub) output
+);
+
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Local Wires and registers
 //
 
-wire		signa, signb;		// alias to opX sign
-wire	[7:0]	expa, expb;		// alias to opX exponent
-wire	[22:0]	fracta, fractb;		// alias to opX fraction
-wire		expa_lt_expb;		// expa is larger than expb indicator
-wire		fractb_lt_fracta;	// fractb is larger than fracta indicator
-reg	[7:0]	exp_dn_out;		// de normalized exponent output
-wire	[7:0]	exp_small, exp_large;
-wire	[7:0]	exp_diff;		// Numeric difference of the two exponents
-wire	[22:0]	adj_op;			// Fraction adjustment: input
-wire	[26:0]	adj_op_tmp;
-wire	[26:0]	adj_op_out;		// Fraction adjustment: output
-wire	[26:0]	fracta_n, fractb_n;	// Fraction selection after normalizing
-wire	[26:0]	fracta_s, fractb_s;	// Fraction Sorting out
-reg	[26:0]	fracta_out, fractb_out;	// Fraction Output
-reg		sign, sign_d;		// Sign Output
-reg		add_d;			// operation (add/sub)
-reg		fasu_op;		// operation (add/sub) register
-wire		expa_dn, expb_dn;
-reg		sticky;
-reg		result_zero_sign;
-reg		add_r, signa_r, signb_r;
-wire	[4:0]	exp_diff_sft;
-wire		exp_lt_27;
-wire		op_dn;
-wire	[26:0]	adj_op_out_sft;
-reg		fracta_lt_fractb, fracta_eq_fractb;
-wire		nan_sign1;
-reg		nan_sign;
+wire logic 			signa, signb;		// alias to opX sign
+wire logic 	[7:0]	expa, expb;			// alias to opX exponent
+wire logic 	[22:0]	fracta, fractb;		// alias to opX fraction
+wire logic 			expa_lt_expb;		// expa is larger than expb indicator
+wire logic 			fractb_lt_fracta;	// fractb is larger than fracta indicator
+wire logic 	[7:0]	exp_small, exp_large;
+wire logic 	[7:0]	exp_diff;			// Numeric difference of the two exponents
+wire logic 	[22:0]	adj_op;				// Fraction adjustment: input
+wire logic 	[26:0]	adj_op_tmp;
+wire logic 	[26:0]	adj_op_out;			// Fraction adjustment: output
+wire logic 	[26:0]	fracta_n, fractb_n;	// Fraction selection after normalizing
+wire logic 	[26:0]	fracta_s, fractb_s;	// Fraction Sorting out
+logic 				sign_d;		// Sign Output
+logic 				add_d;				// operation (add/sub)		
+wire logic 			expa_dn, expb_dn;
+logic 				sticky;
+logic 				add_r, signa_r, signb_r;
+wire logic 	[4:0]	exp_diff_sft;
+wire logic 			exp_lt_27;
+wire logic 			op_dn;
+wire logic 	[26:0]	adj_op_out_sft;
+logic 				fracta_lt_fractb, fracta_eq_fractb;
+wire logic 			nan_sign1;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -111,7 +79,7 @@ assign expb_dn = !(|expb);			// opb denormalized
 // ---------------------------------------------------------------------
 // Calculate the difference between the smaller and larger exponent
 
-wire	[7:0]	exp_diff1, exp_diff1a, exp_diff2;
+wire logic [7:0]	exp_diff1, exp_diff1a, exp_diff2;
 
 assign exp_small  = expa_lt_expb ? expb : expa;
 assign exp_large  = expa_lt_expb ? expa : expb;
@@ -120,8 +88,9 @@ assign exp_diff1a = exp_diff1-1;
 assign exp_diff2  = (expa_dn | expb_dn) ? exp_diff1a : exp_diff1;
 assign  exp_diff  = (expa_dn & expb_dn) ? 8'h0 : exp_diff2;
 
-always @(posedge clk)	// If numbers are equal we should return zero
+always_ff @(posedge clk) begin	// If numbers are equal we should return zero
 	exp_dn_out <= #1 (!add_d & expa==expb & fracta==fractb) ? 8'h0 : exp_large;
+end
 
 // ---------------------------------------------------------------------
 // Adjust the smaller fraction
@@ -140,7 +109,7 @@ assign adj_op_out	= {adj_op_out_sft[26:1], adj_op_out_sft[0] | sticky };
 // ---------------------------------------------------------------------
 // Get truncated portion (sticky bit)
 
-always @(exp_diff_sft or adj_op_tmp)
+always_comb begin
    case(exp_diff_sft)		// synopsys full_case parallel_case
 	00: sticky = 1'h0;
 	01: sticky =  adj_op_tmp[0]; 
@@ -170,8 +139,9 @@ always @(exp_diff_sft or adj_op_tmp)
 	25: sticky = |adj_op_tmp[24:0];
 	26: sticky = |adj_op_tmp[25:0];
 	27: sticky = |adj_op_tmp[26:0];
+	default: sticky = 1'hx;
    endcase
-
+end
 // ---------------------------------------------------------------------
 // Select operands for add/sub (recover hidden bit)
 
@@ -185,62 +155,51 @@ assign fractb_lt_fracta = fractb_n > fracta_n;	// fractb is larger than fracta
 assign fracta_s = fractb_lt_fracta ? fractb_n : fracta_n;
 assign fractb_s = fractb_lt_fracta ? fracta_n : fractb_n;
 
-always @(posedge clk)
+always_ff @(posedge clk) begin
 	fracta_out <= #1 fracta_s;
-
-always @(posedge clk)
 	fractb_out <= #1 fractb_s;
-
+end
+	
 // ---------------------------------------------------------------------
 // Determine sign for the output
 
 // sign: 0=Positive Number; 1=Negative Number
-always @(signa or signb or add or fractb_lt_fracta)
+always_comb begin
    case({signa, signb, add})		// synopsys full_case parallel_case
-
    	// Add
 	3'b0_0_1: sign_d = 0;
 	3'b0_1_1: sign_d = fractb_lt_fracta;
 	3'b1_0_1: sign_d = !fractb_lt_fracta;
 	3'b1_1_1: sign_d = 1;
-
 	// Sub
 	3'b0_0_0: sign_d = fractb_lt_fracta;
 	3'b0_1_0: sign_d = 0;
 	3'b1_0_0: sign_d = 1;
 	3'b1_1_0: sign_d = !fractb_lt_fracta;
-   endcase
 
-always @(posedge clk)
+	default: sign_d = 1'bx;
+   endcase
+end
+
+always_ff @(posedge clk) begin
 	sign <= #1 sign_d;
 
-// Fix sign for ZERO result
-always @(posedge clk)
+	// Fix sign for ZERO result
 	signa_r <= #1 signa;
-
-always @(posedge clk)
 	signb_r <= #1 signb;
-
-always @(posedge clk)
 	add_r <= #1 add;
+	result_zero_sign <= #1	( add_r &  signa_r &  signb_r) 		|
+					(!add_r &  signa_r & !signb_r) 				|
+					( add_r & (signa_r |  signb_r) & (rmode==3))|
+					(!add_r & (signa_r == signb_r) & (rmode==3));
 
-always @(posedge clk)
-	result_zero_sign <= #1	( add_r &  signa_r &  signb_r) |
-				(!add_r &  signa_r & !signb_r) |
-				( add_r & (signa_r |  signb_r) & (rmode==3)) |
-				(!add_r & (signa_r == signb_r) & (rmode==3));
-
-// Fix sign for NAN result
-always @(posedge clk)
+	// Fix sign for NAN result
 	fracta_lt_fractb <= #1 fracta < fractb;
-
-always @(posedge clk)
 	fracta_eq_fractb <= #1 fracta == fractb;
+	nan_sign <= #1 (opa_nan & opb_nan) ? nan_sign1 : opb_nan ? signb_r : signa_r;
+end
 
 assign nan_sign1 = fracta_eq_fractb ? (signa_r & signb_r) : fracta_lt_fractb ? signb_r : signa_r;
-
-always @(posedge clk)
-	nan_sign <= #1 (opa_nan & opb_nan) ? nan_sign1 : opb_nan ? signb_r : signa_r;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -248,7 +207,7 @@ always @(posedge clk)
 //
 
 // add: 1=Add; 0=Subtract
-always @(signa or signb or add)
+always_comb begin
    case({signa, signb, add})		// synopsys full_case parallel_case
    
    	// Add
@@ -262,9 +221,12 @@ always @(signa or signb or add)
 	3'b0_1_0: add_d = 1;
 	3'b1_0_0: add_d = 1;
 	3'b1_1_0: add_d = 0;
-   endcase
 
-always @(posedge clk)
+	default: add_d = 1'bx;
+   endcase
+end
+
+always_ff @(posedge clk)
 	fasu_op <= #1 add_d;
 
 endmodule
