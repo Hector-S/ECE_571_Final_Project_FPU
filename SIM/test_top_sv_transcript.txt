@@ -507,5 +507,5 @@
 # 
 # ** Note: $finish    : /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv(131)
 #    Time: 1481005250 ns  Iteration: 1  Instance: /test
-# End time: 21:44:11 on Dec 05,2024, Elapsed time: 0:09:10
-# Errors: 0, Warnings: 0
+# End time: 22:29:41 on Dec 05,2024, Elapsed time: 0:12:40
+# Errors: 0, Warnings: 1
