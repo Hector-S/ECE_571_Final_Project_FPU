@@ -3,10 +3,6 @@
 # Floating Point Unit Version 1.5
 # 
 # 
-# ** Warning: (vsim-8315) No condition is true in the unique/priority if/case statement.
-#    Time: 0 ps  Iteration: 2  Process: /test/u0/u1/#implicit#unique__181 File: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv Line: 181
-# ** Warning: (vsim-8315) No condition is true in the unique/priority if/case statement.
-#    Time: 0 ps  Iteration: 2  Process: /test/u0/u1/#implicit#unique__138 File: /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/verilog/pre_norm.sv Line: 138
 # 
 # 
 # Testing FPU 
@@ -15,268 +11,501 @@
 # Running Combo Test 1 ...
 # 
 # 
-# ERROR: INE Exception: Expected: 1, Got x
+# Running Combo Test 2 ...
 # 
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
+# Running Combo Test 3 ...
 # 
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
+# Running Combo Test 4 ...
 # 
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: Xxxxxxxx
 # 
+# Testing FP Add/Sub Unit
 # 
-#                10540: ERROR: output mismatch. Expected 8bdbfd44, Got Xxxxxxxx (8bdbfda4833fa55c8bdbfd44)
-# opa:	(1 17 (-104 ) 5bfda4) 	-0.000000
-# opa:	0bdbfda4
-# 	-
-# opb:	(1 06 (-121 ) 3fa55c) 	-0.000000
-# EXP:	(1 17 (-104 ) 5bfd44) 	-0.000000
-# GOT:	(0 xx (-  x ) xxxxxx) 	0.000000
 # 
-# This rmode: 0 fpop: 1; Previous: rmode: x fpop: x; Next: rmode: 1 fpop: 0
+# +++++ ROUNDING MODE: Nearest Even
 # 
 # 
 # 
+# Running Pat 0 Add Test ...
 # 
-# ERROR: INE Exception: Expected: 1, Got x
 # 
+# Running Pat 0 Sub Test ...
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
 # 
+# Running Pat 1 Add Test ...
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
 # 
+# Running Pat 1 Sub Test ...
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: xxxxxxxx
 # 
+# Running Pat 2 Add Test ...
 # 
-#                11540: ERROR: output mismatch. Expected 5ff73b11, Got xxxxxxxx (5ff73b12805e7f865ff73b11)
-# opa:	(0 bf (+ 64 ) 773b12) 	35629705084406857728.000000
-# opa:	5ff73b12
-# 	+
-# opb:	(1 00 (-127 ) 5e7f86) 	-0.000000
-# EXP:	(0 bf (+ 64 ) 773b11) 	35629702885383602176.000000
-# GOT:	(x xx (-  x ) xxxxxx) 	0.000000
 # 
-# This rmode: 1 fpop: 0; Previous: rmode: 0 fpop: 1; Next: rmode: 2 fpop: 0
+# Running Pat 2 Sub Test ...
 # 
 # 
+# Running Random Lg. Num Add Test ...
 # 
 # 
-# ERROR: INE Exception: Expected: 1, Got x
+# Running Random Lg. Num Sub Test ...
 # 
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
+# Running Random Sm. Num Add Test ...
 # 
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
+# Running Random Sm. Num Sub Test ...
 # 
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: xxxxxxxx
 # 
+# +++++ ROUNDING MODE: Towards Zero
 # 
-#                12540: ERROR: output mismatch. Expected fde6c57d, Got xxxxxxxx (9f7e3c63fde6c57dfde6c57d)
-# opa:	(1 3e (- 65 ) 7e3c63) 	-0.000000
-# opa:	1f7e3c63
-# 	+
-# opb:	(1 fb (+124 ) 66c57d) 	-20256651898977669500563332310875588253294456079062727846251584427999856162490250689998957362341046499871083794091735289276497349745161237185242460719199571183376670211486796634232213586475334497908256618043872992634533869483964046820713442832100786119839962552938175104665376515481466481093855507419668414464.000000
-# EXP:	(1 fb (+124 ) 66c57d) 	-20256651898977669500563332310875588253294456079062727846251584427999856162490250689998957362341046499871083794091735289276497349745161237185242460719199571183376670211486796634232213586475334497908256618043872992634533869483964046820713442832100786119839962552938175104665376515481466481093855507419668414464.000000
-# GOT:	(x xx (-  x ) xxxxxx) 	0.000000
 # 
-# This rmode: 2 fpop: 0; Previous: rmode: 1 fpop: 0; Next: rmode: 2 fpop: 2
 # 
+# Running Pat 0 Add Test ...
 # 
 # 
+# Running Pat 0 Sub Test ...
 # 
-# ERROR: INE Exception: Expected: 1, Got x
 # 
+# Running Pat 1 Add Test ...
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
 # 
+# Running Pat 1 Sub Test ...
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
 # 
+# Running Pat 2 Add Test ...
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: Xxxxxxxx
 # 
+# Running Pat 2 Sub Test ...
 # 
-#                13540: ERROR: output mismatch. Expected 5877ceb1, Got Xxxxxxxx (1bf9fd8b7bfdc3b65877ceb1)
-# opa:	(0 37 (- 72 ) 79fd8b) 	0.000000
-# opa:	1bf9fd8b
-# 	*
-# opb:	(0 f7 (+120 ) 7dc3b6) 	1392183508485838109153920464660364274290754735631198032863347970419896947613592689196004625824529786306341406471615648002899071013610626881876039641541526054512051997175367863215250934727787706038602432786519465171673484581680791856514765651245806804562408929479893388227593648480965757159510817781391032320.000000
-# EXP:	(0 b0 (+ 49 ) 77ceb1) 	1089868419563520.000000
-# GOT:	(0 xx (-  x ) xxxxxx) 	0.000000
 # 
-# This rmode: 2 fpop: 2; Previous: rmode: 2 fpop: 0; Next: rmode: 3 fpop: 3
+# Running Random Lg. Num Add Test ...
 # 
 # 
+# Running Random Lg. Num Sub Test ...
 # 
 # 
-# ERROR: INE Exception: Expected: 1, Got x
+# Running Random Sm. Num Add Test ...
 # 
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
+# Running Random Sm. Num Sub Test ...
 # 
 # 
-#                14540: ERROR: output mismatch. Expected 4e9d1d56, Got Xxxxxxxx (e99320b3da6fba414e9d1d56)
-# opa:	(1 d3 (+ 84 ) 1320b3) 	-11745738273012831166577176323152723668645406523238606320035904191149972123375809425928520295061260210890330465875573512279728402460622032612679318215371987904203495397655675732389752849618617769520296898332545090211979118243639902948937824329702635985034993557619543763275395700345275567503835136.000000
-# opa:	699320b3
-# 	/
-# opb:	(1 b4 (+ 53 ) 6fba41) 	-16869326942371840.000000
-# EXP:	(0 9d (+ 30 ) 1d1d56) 	1317972736.000000
-# GOT:	(0 Xx (-  x ) xxxxxx) 	0.000000
 # 
-# This rmode: 3 fpop: 3; Previous: rmode: 2 fpop: 2; Next: rmode: 1 fpop: 2
+# +++++ ROUNDING MODE: Towards INF+ (UP)
 # 
 # 
 # 
+# Running Pat 0 Add Test ...
 # 
-# ERROR: INE Exception: Expected: 1, Got x
 # 
+# Running Pat 0 Sub Test ...
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
 # 
+# Running Pat 1 Add Test ...
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
 # 
+# Running Pat 1 Sub Test ...
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: Xxxxxxxx
 # 
+# Running Pat 2 Add Test ...
 # 
-#                15540: ERROR: output mismatch. Expected fbcc88b6, Got Xxxxxxxx (c8dbc6da726e3eb6fbcc88b6)
-# opa:	(1 91 (+ 18 ) 5bc6da) 	-450102.812500
-# opa:	48dbc6da
-# 	*
-# opb:	(0 e4 (+101 ) 6e3eb6) 	2492983693235048881209103794597733555647936838709023156005606774444558817083750276379957356727284609641118495486425161278094674013537436691230213524118368490447975009225110099420728828269886217012863557539236751330287823631992418765048286893940503049169971851860420463873603578641231544078259242139648.000000
-# EXP:	(1 f7 (+120 ) 4c88b6) 	-1122099048958467568235660446794300217920647038792701231771076247527266261667041290160369042460245488306699893216017201814142399172899022204046612379193673778004077281843148296996727328232585579036426719671169775723237318170094738521418438950540988356737727351063326406349544854144329706864892211712034340864.000000
-# GOT:	(1 xx (-  x ) xxxxxx) 	-0.000000
 # 
-# This rmode: 1 fpop: 2; Previous: rmode: 3 fpop: 3; Next: rmode: 2 fpop: 3
+# Running Pat 2 Sub Test ...
 # 
 # 
+# Running Random Lg. Num Add Test ...
 # 
 # 
-# ERROR: INE Exception: Expected: 1, Got x
+# Running Random Lg. Num Sub Test ...
 # 
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
+# Running Random Sm. Num Add Test ...
 # 
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
+# Running Random Sm. Num Sub Test ...
 # 
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: Xxxxxxxx
 # 
+# +++++ ROUNDING MODE: Towards INF- (DOWN)
 # 
-#                16540: ERROR: output mismatch. Expected 5b542a21, Got Xxxxxxxx (31d0151a15fb13105b542a21)
-# opa:	(0 63 (- 28 ) 50151a) 	0.000000
-# opa:	31d0151a
-# 	/
-# opb:	(0 2b (- 84 ) 7b1310) 	0.000000
-# EXP:	(0 b6 (+ 55 ) 542a21) 	59719016284946432.000000
-# GOT:	(0 xx (-  x ) xxxxxx) 	0.000000
 # 
-# This rmode: 2 fpop: 3; Previous: rmode: 1 fpop: 2; Next: rmode: 0 fpop: 1
 # 
+# Running Pat 0 Add Test ...
 # 
 # 
+# Running Pat 0 Sub Test ...
 # 
-# ERROR: INE Exception: Expected: 1, Got x
 # 
+# Running Pat 1 Add Test ...
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
 # 
+# Running Pat 1 Sub Test ...
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
 # 
+# Running Pat 2 Add Test ...
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: xxxxxxxx
 # 
+# Running Pat 2 Sub Test ...
 # 
-#                17540: ERROR: output mismatch. Expected 33abd3c3, Got xxxxxxxx (33abd3c3a2fbe6d333abd3c3)
-# opa:	(0 67 (- 24 ) 2bd3c3) 	0.000000
-# opa:	33abd3c3
-# 	-
-# opb:	(1 45 (- 58 ) 7be6d3) 	-0.000000
-# EXP:	(0 67 (- 24 ) 2bd3c3) 	0.000000
-# GOT:	(x xx (-  x ) xxxxxx) 	0.000000
 # 
-# This rmode: 0 fpop: 1; Previous: rmode: 2 fpop: 3; Next: rmode: 0 fpop: 2
+# Running Random Lg. Num Add Test ...
 # 
 # 
+# Running Random Lg. Num Sub Test ...
 # 
 # 
-# ERROR: INE Exception: Expected: 1, Got x
+# Running Random Sm. Num Add Test ...
 # 
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
+# Running Random Sm. Num Sub Test ...
 # 
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: Xxxxxxxx
 # 
+# Testing FP MUL Unit
 # 
-#                18540: ERROR: output mismatch. Expected b06f7269, Got Xxxxxxxx (3cef8602b2ffeb0eb06f7269)
-# opa:	(0 79 (-  6 ) 6f8602) 	0.029239
-# opa:	3cef8602
-# 	*
-# opb:	(1 65 (- 26 ) 7feb0e) 	-0.000000
-# EXP:	(1 60 (- 31 ) 6f7269) 	-0.000000
-# GOT:	(1 xx (-  x ) xxxxxx) 	-0.000000
 # 
-# This rmode: 0 fpop: 2; Previous: rmode: 0 fpop: 1; Next: rmode: 2 fpop: 2
+# +++++ ROUNDING MODE: Nearest Even
 # 
 # 
 # 
+# Running Pat 0 Test ...
 # 
-# ERROR: INE Exception: Expected: 1, Got x
 # 
+# Running Pat 1 Test ...
 # 
-# ERROR: Overflow Exception Expected: 0, Got x
 # 
+# Running Pat 2 Test ...
 # 
-# ERROR: Underflow Exception Expected: 0, Got x
 # 
+# Running Random Lg. Num Test ...
 # 
-# ERROR: QNAN Detection Failed. QNAN: 0, Sum: Xxxxxxxx
 # 
+# Running Random Sm. Num Test ...
 # 
-#                19540: ERROR: output mismatch. Expected a75b3508, Got Xxxxxxxx (d17cf34b155dd998a75b3508)
-# opa:	(1 a2 (+ 35 ) 7cf34b) 	-67900846080.000000
-# opa:	517cf34b
-# 	*
-# opb:	(0 2a (- 85 ) 5dd998) 	0.000000
-# EXP:	(1 4e (- 49 ) 5b3508) 	-0.000000
-# GOT:	(1 xx (-  x ) xxxxxx) 	-0.000000
 # 
-# This rmode: 2 fpop: 2; Previous: rmode: 0 fpop: 2; Next: rmode: 0 fpop: 0
 # 
+# +++++ ROUNDING MODE: Towards Zero
 # 
 # 
 # 
-#                20540: ERROR: output mismatch. Expected ffe9b686, Got 7fc00001 (71bf01f5ffa9b686ffe9b686)
-# opa:	(0 e3 (+100 ) 3f01f5) 	999347340255901993271105595518057665555549143265040957730051262700727947414119691716640490488282324481806190418985592791485278805153537321324507266111933227412045266132156700604333021596031928676201250134612850465834556223500683026442114276849383906169710645455966736451436865327941319358561631862784.000000
-# opa:	71bf01f5
-# 	+
-# opb:	(1 ff (+128 ) 29b686) 	-nan
-# EXP:	(1 ff (+128 ) 69b686) 	-nan
-# GOT:	(0 ff (+128 ) 400001) 	nan
+# Running Pat 0 Test ...
 # 
-# This rmode: 0 fpop: 0; Previous: rmode: 2 fpop: 2; Next: rmode: 3 fpop: 1
 # 
+# Running Pat 1 Test ...
 # 
 # 
+# Running Pat 2 Test ...
 # 
 # 
-# Found to many errors, aborting ...
+# Running Random Lg. Num Test ...
 # 
 # 
-# Run 11 vecors, found 11 errors.
+# Running Random Sm. Num Test ...
 # 
 # 
-# ** Note: $finish    : /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv(374)
-#    Time: 2150 ns  Iteration: 1  Instance: /test
-# End time: 08:37:52 on Dec 04,2024, Elapsed time: 0:00:07
-# Errors: 0, Warnings: 4
+# 
+# +++++ ROUNDING MODE: Towards INF+ (UP)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards INF- (DOWN)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# Testing FP DIV Unit
+# 
+# 
+# +++++ ROUNDING MODE: Nearest Even
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards Zero
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards INF+ (UP)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards INF- (DOWN)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# Testing FP I2F Unit
+# 
+# 
+# +++++ ROUNDING MODE: Nearest Even
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards Zero
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards INF+ (UP)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards INF- (DOWN)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# Testing FP F2I Unit
+# 
+# 
+# +++++ ROUNDING MODE: Nearest Even
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards Zero
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards INF+ (UP)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# +++++ ROUNDING MODE: Towards INF- (DOWN)
+# 
+# 
+# 
+# Running Pat 0 Test ...
+# 
+# 
+# Running Pat 1 Test ...
+# 
+# 
+# Running Pat 2 Test ...
+# 
+# 
+# Running Random Lg. Num Test ...
+# 
+# 
+# Running Random Sm. Num Test ...
+# 
+# 
+# 
+# 
+# 
+# 
+# All test Done !
+# 
+# 
+# Run 14808684 vecors, found 0 errors.
+# 
+# 
+# ** Note: $finish    : /u/sotohec/ECE571-F24/fp/ECE_571_Final_Project_FPU/RTL/test_bench/test_top.sv(131)
+#    Time: 1481005250 ns  Iteration: 1  Instance: /test
+# End time: 21:44:11 on Dec 05,2024, Elapsed time: 0:09:10
+# Errors: 0, Warnings: 0

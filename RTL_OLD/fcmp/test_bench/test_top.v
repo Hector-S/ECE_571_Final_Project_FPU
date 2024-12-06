@@ -103,35 +103,35 @@ initial
 	if(test_sel[0])
 	   begin
 		$display("\nRunning Pat 0 Test ...\n");
-		$readmemh ("../test_vectors/fcmp/fcmp_pat0.hex", tmem);
+		$readmemh ("RTL/fcmp/fcmp/fcmp_pat0.hex", tmem);
 		run_test;
 	   end
 	
 	if(test_sel[1])
 	   begin
 		$display("\nRunning Pat 1 Test ...\n");
-		$readmemh ("../test_vectors/fcmp/fcmp_pat1.hex", tmem);
+		$readmemh ("RTL/fcmp/fcmp/fcmp_pat1.hex", tmem);
 		run_test;
 	   end
 	
 	if(test_sel[2])
 	   begin
 		$display("\nRunning Pat 2 Test ...\n");
-		$readmemh ("../test_vectors/fcmp/fcmp_pat2.hex", tmem);
+		$readmemh ("RTL/fcmp/fcmp/fcmp_pat2.hex", tmem);
 		run_test;
 	   end
 	
 	if(test_sel[3])
 	   begin
 		$display("\nRunning Random Lg. Num Test ...\n");
-		$readmemh ("../test_vectors/fcmp/fcmp_lg.hex", tmem);
+		$readmemh ("RTL/fcmp/fcmp/fcmp_lg.hex", tmem);
 		run_test;
 	   end
 	
 	if(test_sel[4])
 	   begin
 		$display("\nRunning Random Sm. Num Test ...\n");
-		$readmemh ("../test_vectors/fcmp/fcmp_sm.hex", tmem);
+		$readmemh ("RTL/fcmp/fcmp/fcmp_sm.hex", tmem);
 		run_test;
 	   end
 
