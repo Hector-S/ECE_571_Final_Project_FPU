@@ -1,4 +1,4 @@
-/* post_norm.sv
+/* pre_norm.sv
 ** Conversion of Verilog code into SystemVerilog
 ** ECE 571 Group 17 Project
 ** 
