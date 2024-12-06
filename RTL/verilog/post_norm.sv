@@ -20,7 +20,7 @@ module post_norm (
 	input logic 		rem_00,
 	input logic [4:0]	div_opa_ldz,
 	input logic 		output_zero,
-	output wire logic [30:0]	out,					// result output
+	output wire logic [30:0]out,					// result output
 	output logic 		ine,
 	output logic 		overflow, underflow,
 	output logic 		f2i_out_sign
@@ -33,37 +33,37 @@ module post_norm (
 
 wire logic 	[22:0]	fract_out;
 wire logic 	[7:0]	exp_out;
-wire logic 			exp_out1_co;
+wire logic 		exp_out1_co;
 wire logic 	[22:0]	fract_out_final;
 logic 		[22:0]	fract_out_rnd;
 wire logic 	[8:0]	exp_next_mi;
-wire logic 			dn;
-wire logic 			exp_rnd_adj;
+wire logic 		dn;
+wire logic 		exp_rnd_adj;
 wire logic 	[7:0]	exp_out_final;
 logic 		[7:0]	exp_out_rnd;
-wire logic 			op_dn = opa_dn | opb_dn;
-wire logic 			op_mul = fpu_op[2:0]==3'b010;
-wire logic 			op_div = fpu_op[2:0]==3'b011;
-wire logic 			op_i2f = fpu_op[2:0]==3'b100;
-wire logic 			op_f2i = fpu_op[2:0]==3'b101;
+wire logic 		op_dn = opa_dn | opb_dn;
+wire logic 		op_mul = fpu_op[2:0]==3'b010;
+wire logic 		op_div = fpu_op[2:0]==3'b011;
+wire logic 		op_i2f = fpu_op[2:0]==3'b100;
+wire logic 		op_f2i = fpu_op[2:0]==3'b101;
 logic 		[5:0]	fi_ldz;
 
-wire logic 			g, r, s;
-wire logic 			round, round2, round2a, round2_fasu, round2_fmul;
+wire logic 		g, r, s;
+wire logic 		round, round2, round2a, round2_fasu, round2_fmul;
 wire logic 	[7:0]	exp_out_rnd0, exp_out_rnd1, exp_out_rnd2, exp_out_rnd2a;
 wire logic 	[22:0]	fract_out_rnd0, fract_out_rnd1, fract_out_rnd2, fract_out_rnd2a;
-wire logic 			exp_rnd_adj0, exp_rnd_adj2a;
-wire logic 			r_sign;
-wire logic 			ovf0, ovf1;
+wire logic 		exp_rnd_adj0, exp_rnd_adj2a;
+wire logic 		r_sign;
+wire logic 		ovf0, ovf1;
 wire logic 	[23:0]	fract_out_pl1;
 wire logic 	[7:0]	exp_out_pl1, exp_out_mi1;
-wire logic 			exp_out_00, exp_out_fe, exp_out_ff, exp_in_00, exp_in_ff;
-wire logic 			exp_out_final_ff, fract_out_7fffff;
+wire logic 		exp_out_00, exp_out_fe, exp_out_ff, exp_in_00, exp_in_ff;
+wire logic 		exp_out_final_ff, fract_out_7fffff;
 wire logic 	[24:0]	fract_trunc;
 wire logic 	[7:0]	exp_out1;
-wire logic 			grs_sel;
-wire logic 			fract_out_00, fract_in_00;
-wire logic 			shft_co;
+wire logic 		grs_sel;
+wire logic 		fract_out_00, fract_in_00;
+wire logic 		shft_co;
 wire logic 	[8:0]	exp_in_pl1, exp_in_mi1;
 wire logic 	[47:0]	fract_in_shftr;
 wire logic 	[47:0]	fract_in_shftl;
@@ -71,15 +71,15 @@ wire logic 	[47:0]	fract_in_shftl;
 wire logic 	[7:0]	exp_div;
 wire logic 	[7:0]	shft2;
 wire logic 	[7:0]	exp_out1_mi1;
-wire logic 			div_dn;
-wire logic 			div_nr;
-wire logic 			grs_sel_div;
+wire logic 		div_dn;
+wire logic 		div_nr;
+wire logic 		grs_sel_div;
 
-wire logic 			div_inf;
+wire logic 		div_inf;
 wire logic 	[6:0]	fi_ldz_2a;
 wire logic 	[7:0]	fi_ldz_2;
 wire logic 	[7:0]	div_shft1, div_shft2, div_shft3, div_shft4;
-wire logic 			div_shft1_co;
+wire logic 		div_shft1_co;
 wire logic 	[8:0]	div_exp1;
 wire logic 	[7:0]	div_exp2, div_exp3;
 logic 			left_right, lr_mul, lr_div;
@@ -91,18 +91,18 @@ wire logic 	[7:0]	exp_fix_div;
 wire logic 	[7:0]	exp_fix_diva, exp_fix_divb;
 wire logic 	[5:0]	fi_ldz_mi1;
 wire logic 	[5:0]	fi_ldz_mi22;
-wire logic 			exp_zero;
+wire logic 		exp_zero;
 wire logic 	[6:0]	ldz_all;
 wire logic 	[7:0]	ldz_dif;
 
 wire logic 	[8:0]	div_scht1a;
 wire logic 	[7:0]	f2i_shft;
 wire logic 	[55:0]	exp_f2i_1;
-wire logic 			f2i_zero, f2i_max;
+wire logic 		f2i_zero, f2i_max;
 wire logic 	[7:0]	f2i_emin;
 wire logic 	[7:0]	conv_shft;
 wire logic 	[7:0]	exp_i2f, exp_f2i, conv_exp;
-wire logic 			round2_f2i;
+wire logic 		round2_f2i;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -175,7 +175,7 @@ wire logic	rmode_00, rmode_01, rmode_10, rmode_11;
 // Misc common signals
 assign exp_in_ff        = &exp_in;
 assign exp_in_00        = !(|exp_in);
-assign exp_in_80		= exp_in[7] & !(|exp_in[6:0]);
+assign exp_in_80	= exp_in[7] & !(|exp_in[6:0]);
 assign exp_out_ff       = &exp_out;
 assign exp_out_00       = !(|exp_out);
 assign exp_out_fe       = &exp_out[7:1] & !exp_out[0];
@@ -224,20 +224,20 @@ assign f2i_shft  = exp_in-8'h7d;
 always_comb begin : sel_shift_direction
 	// Select shifting direction
 	priority case(1'b1)
-		(op_dn & !exp_ovf[1] & exp_ovf[0])  : lr_div = 1;
-		(op_dn & exp_ovf[1])			    : lr_div = 0;
-		(op_dn & div_shft1_co)  		    : lr_div = 0;
-		(op_dn & exp_out_00)			    : lr_div = 1;
-		(!op_dn & exp_out_00 & !exp_ovf[1]) : lr_div = 1;
-		exp_ovf[1]						    : lr_div = 0;
-		default							    : lr_div = 1;
+		(op_dn & !exp_ovf[1] & exp_ovf[0]) 	: lr_div = 1;
+		(op_dn & exp_ovf[1]) 			: lr_div = 0;
+		(op_dn & div_shft1_co) 			: lr_div = 0;
+		(op_dn & exp_out_00) 			: lr_div = 1;
+		(!op_dn & exp_out_00 & !exp_ovf[1]) 	: lr_div = 1;
+		exp_ovf[1]				: lr_div = 0;
+		default	: lr_div = 1;
 	endcase
 
 	priority case(1'b1)
 		(shft_co | (!exp_ovf[1] & exp_in_00) | 
 		(!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00) )) : lr_mul = 1;
-		(exp_ovf[1] | exp_in_00) 								  : lr_mul = 0;
-		default													  : lr_mul = 1;
+		(exp_ovf[1] | exp_in_00) 				: lr_mul = 0;
+		default							: lr_mul = 1;
 	endcase
 
 	priority case(1'b1)
@@ -253,20 +253,17 @@ assign shift_right = op_div ? shftr_div : shftr_mul;
 
 assign conv_shft = op_f2i ? f2i_shft : {2'h0, fi_ldz};
 
-assign shift_left  = op_div 			? shftl_div : 
-					 op_mul 			? shftl_mul : 
-					 (op_f2i | op_i2f) 	? conv_shft : 
-					 					  fasu_shift;
+assign shift_left  = op_div ? shftl_div : 
+		     op_mul ? shftl_mul : 
+		     (op_f2i | op_i2f) ? conv_shft : fasu_shift;
 
-assign shftl_mul = 	(shft_co | (!exp_ovf[1] & exp_in_00) | (!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00))) ? exp_in_pl1[7:0] : {2'h0, fi_ldz};
+assign shftl_mul = (shft_co | (!exp_ovf[1] & exp_in_00) | (!exp_ovf[1] & !exp_in_00 & (exp_out1_co | exp_out_00))) ? exp_in_pl1[7:0] : {2'h0, fi_ldz};
 
-assign shftl_div = 	( op_dn & exp_out_00 & !(!exp_ovf[1] & exp_ovf[0]))	? 	div_shft1[7:0] : 
-					(!op_dn & exp_out_00 & !exp_ovf[1]) 				? 	exp_in[7:0] : 
-																			{2'h0, fi_ldz};
+assign shftl_div = ( op_dn & exp_out_00 & !(!exp_ovf[1] & exp_ovf[0])) ? div_shft1[7:0] : 
+		(!op_dn & exp_out_00 & !exp_ovf[1]) ? exp_in[7:0] : {2'h0, fi_ldz};
 
-assign shftr_div = 	(op_dn & exp_ovf[1]) 	? div_shft3 : 
-					(op_dn & div_shft1_co) 	? div_shft4 : 
-											  div_shft2;
+assign shftr_div = (op_dn & exp_ovf[1]) ? div_shft3 : 
+		(op_dn & div_shft1_co) 	? div_shft4 : div_shft2;
 					
 // Do the actual shifting
 assign fract_in_shftr   = (|shift_right[7:6])                      ? 0 : fract_in>>shift_right[5:0];
@@ -314,11 +311,10 @@ assign div_exp1  = exp_in_mi1 + fi_ldz_2;	// 9 bits - includes carry out
 assign div_exp2  = exp_in_pl1 - ldz_all;
 assign div_exp3  = exp_in + ldz_dif;
 
-assign exp_div =(opa_dn & opb_dn) 										? div_exp3 : 
-				(opb_dn) 		  										? div_exp1[7:0] :
+assign exp_div =(opa_dn & opb_dn) ? div_exp3 : 
+				(opb_dn) ? div_exp1[7:0] :
 				(opa_dn & !( (exp_in<div_opa_ldz) | (div_exp2>9'hfe) ))	? div_exp2 :
-				(opa_dn | (exp_in_00 & !exp_ovf[1]) )					? 0 :
-									  									  exp_out1_mi1;
+				(opa_dn | (exp_in_00 & !exp_ovf[1]) ) ? 0 : exp_out1_mi1;
 
 assign div_inf = opb_dn & !opa_dn & (div_exp1[7:0] < 8'h7f);
 
@@ -352,10 +348,10 @@ assign round2a = !exp_out_fe | !fract_out_7fffff | (exp_out_fe & fract_out_7ffff
 assign round2_fasu = ((r | s) & !r_sign) & (!exp_out[7] | (exp_out[7] & round2a));
 
 assign round2_fmul = !r_sign & 
-					((exp_ovf[1] & !fract_in_00 &	
-					( ((!exp_out1_co | op_dn) & (r | s | (!rem_00 & op_div) )) | fract_out_00 | (!op_dn & !op_div))) |
-					((r | s | (!rem_00 & op_div)) & 
-					((!exp_ovf[1] & (exp_in_80 | !exp_ovf[0])) | op_div | ( exp_ovf[1] & !exp_ovf[0] & exp_out1_co))));
+		((exp_ovf[1] & !fract_in_00 &	
+		( ((!exp_out1_co | op_dn) & (r | s | (!rem_00 & op_div) )) | fract_out_00 | (!op_dn & !op_div))) |
+		((r | s | (!rem_00 & op_div)) & 
+		((!exp_ovf[1] & (exp_in_80 | !exp_ovf[0])) | op_div | ( exp_ovf[1] & !exp_ovf[0] & exp_out1_co))));
 
 assign round2_f2i = rmode_10 & (( |fract_in[23:0] & !opas & (exp_in<8'h80 )) | (|fract_trunc));
 assign round2 = (op_mul | op_div) ? round2_fmul : op_f2i ? round2_f2i : round2_fasu;
@@ -445,18 +441,18 @@ assign undeflow_div = !(exp_ovf[1] &  exp_ovf[0] & rmode_00) & !inf_out & !max_n
 						(( op_dn & !exp_ovf[1] & exp_ovf[0])|
 						( op_dn &  exp_ovf[1])				|
 						( op_dn &  div_shft1_co)			| 
-						  exp_out_00						|
-						  exp_ovf[1])) 						|
+						  exp_out_00					|
+						  exp_ovf[1])) 					|
 
-						( exp_ovf[1] & !exp_ovf[0] 						& 
-						((  op_dn & exp_in>8'h16 & fi_ldz<23) 			|
-						(  op_dn & exp_in<23 & fi_ldz<23 & !rem_00)		|
+						( exp_ovf[1] & !exp_ovf[0] 			& 
+						((  op_dn & exp_in>8'h16 & fi_ldz<23) 		|
+						(  op_dn & exp_in<23 & fi_ldz<23 & !rem_00)	|
 						( !op_dn & (exp_in[7]==exp_div[7]) & !rem_00) 	|
 						( !op_dn & exp_in_00 & (exp_div[7:1]==7'h7f) ) 	|
-						( !op_dn & exp_in<8'h7f & exp_in>8'h20 ))) 		|
+						( !op_dn & exp_in<8'h7f & exp_in>8'h20 ))) 	|
 
 						(!exp_ovf[1] & !exp_ovf[0] 			& 
-						(( op_dn & fi_ldz<23 & exp_out_00)  |
+						(( op_dn & fi_ldz<23 & exp_out_00)  		|
 						( exp_in_00 & !rem_00) 				|
 						( !op_dn & ldz_all<23 & exp_in==1 & exp_out_00 & !rem_00))));
 
