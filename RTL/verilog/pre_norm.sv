@@ -27,29 +27,29 @@ module pre_norm (
 // Local Wires and registers
 //
 
-wire logic 			signa, signb;		// alias to opX sign
+wire logic 		signa, signb;		// alias to opX sign
 wire logic 	[7:0]	expa, expb;			// alias to opX exponent
 wire logic 	[22:0]	fracta, fractb;		// alias to opX fraction
-wire logic 			expa_lt_expb;		// expa is larger than expb indicator
-wire logic 			fractb_lt_fracta;	// fractb is larger than fracta indicator
+wire logic 		expa_lt_expb;		// expa is larger than expb indicator
+wire logic 		fractb_lt_fracta;	// fractb is larger than fracta indicator
 wire logic 	[7:0]	exp_small, exp_large;
-wire logic 	[7:0]	exp_diff;			// Numeric difference of the two exponents
-wire logic 	[22:0]	adj_op;				// Fraction adjustment: input
+wire logic 	[7:0]	exp_diff;		// Numeric difference of the two exponents
+wire logic 	[22:0]	adj_op;			// Fraction adjustment: input
 wire logic 	[26:0]	adj_op_tmp;
-wire logic 	[26:0]	adj_op_out;			// Fraction adjustment: output
+wire logic 	[26:0]	adj_op_out;		// Fraction adjustment: output
 wire logic 	[26:0]	fracta_n, fractb_n;	// Fraction selection after normalizing
 wire logic 	[26:0]	fracta_s, fractb_s;	// Fraction Sorting out
-logic 				sign_d;		// Sign Output
-logic 				add_d;				// operation (add/sub)		
-wire logic 			expa_dn, expb_dn;
-logic 				sticky;
-logic 				add_r, signa_r, signb_r;
+logic 			sign_d;			// Sign Output
+logic 			add_d;			// operation (add/sub)		
+wire logic 		expa_dn, expb_dn;
+logic 			sticky;
+logic 			add_r, signa_r, signb_r;
 wire logic 	[4:0]	exp_diff_sft;
-wire logic 			exp_lt_27;
-wire logic 			op_dn;
+wire logic 		exp_lt_27;
+wire logic 		op_dn;
 wire logic 	[26:0]	adj_op_out_sft;
-logic 				fracta_lt_fractb, fracta_eq_fractb;
-wire logic 			nan_sign1;
+logic 			fracta_lt_fractb, fracta_eq_fractb;
+wire logic 		nan_sign1;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -188,10 +188,10 @@ always_ff @(posedge clk) begin
 	signa_r <= #1 signa;
 	signb_r <= #1 signb;
 	add_r <= #1 add;
-	result_zero_sign <= #1	( add_r &  signa_r &  signb_r) 		|
-					(!add_r &  signa_r & !signb_r) 				|
-					( add_r & (signa_r |  signb_r) & (rmode==3))|
-					(!add_r & (signa_r == signb_r) & (rmode==3));
+	result_zero_sign <= #1	( add_r &  signa_r &  signb_r) 			|
+				(!add_r &  signa_r & !signb_r) 			|
+				( add_r & (signa_r |  signb_r) & (rmode==3))	|
+				(!add_r & (signa_r == signb_r) & (rmode==3));
 
 	// Fix sign for NAN result
 	fracta_lt_fractb <= #1 fracta < fractb;
