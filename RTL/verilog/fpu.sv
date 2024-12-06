@@ -211,6 +211,7 @@ always_ff @(posedge clk) begin  // Exponent must be once cycle delayed
         2, 3: exp_r <= exp_mul;
         4:   exp_r <= 0;
         5:   exp_r <= opa_r1[30:23];
+        default: exp_r <= 'x;
     endcase
 end
 assign fract_div = (opb_dn ? quo[49:2] : {quo[26:0], 21'h0});
@@ -227,6 +228,7 @@ always_comb begin
         2:    fract_denorm = prod;
         3:    fract_denorm = fract_div;
         4, 5: fract_denorm = fract_i2f;
+        default: fract_denorm = 'x;
     endcase
 end
 always_ff @(posedge clk) begin
