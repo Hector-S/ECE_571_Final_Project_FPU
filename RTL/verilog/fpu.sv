@@ -221,7 +221,7 @@ always_ff @(posedge clk) begin
         (sign_d ? 1 - {opa_r1, 17'h01} : {opa_r1, 17'h0});
 end
 
-always_ff @(fpu_op_r3 or fract_out_q or prod or fract_div or fract_i2f) begin
+always_comb begin
     case(fpu_op_r3)
         0, 1: fract_denorm = {fract_out_q, 20'h0};
         2:    fract_denorm = prod;
